@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "styled-components";
-import StyledComponentsRegistry from "./registry";
+import StyledComponentsRegistry from "../lib/registry";
+import ThemeWrapper from "../lib/ThemeWrapper";
+import VerticalNavBar from "../components/VerticalNavBar";
+import ParentLayout from "../components/ParentLayout";
 
 export const metadata: Metadata = {
   title: "CloneX Explorer",
   description:
     "Interactive explorer for the CloneX NFT project, providing real-time insights and analytics through a subgraph API.",
-};
-
-const theme = {
-  main: "mediumseagreen",
 };
 
 export default function RootLayout({
@@ -21,7 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <StyledComponentsRegistry>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeWrapper>
+            <VerticalNavBar />
+            <ParentLayout>{children}</ParentLayout>
+          </ThemeWrapper>
         </StyledComponentsRegistry>
       </body>
     </html>
