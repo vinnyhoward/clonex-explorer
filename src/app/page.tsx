@@ -1,5 +1,4 @@
 "use client";
-import VerticalNavBar from "../components/VerticalNavBar";
 
 export default function Page() {
   return (

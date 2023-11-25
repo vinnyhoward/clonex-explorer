@@ -34,8 +34,7 @@ const NavBarContainer = styled.div`
     height: 200px;
   }
 
-  .social-container {
-  }
+  .social-container {}
 
   .icon-wrapper {
     margin: 20px 0;
@@ -49,16 +48,16 @@ const VerticalNavBar = () => {
     gsap.context(() => {
       gsap.to(".container", {
         keyframes: [
-          { x: 100, duration: 0.25, ease: "sine.out" }, // finetune with individual eases
+          { x: 100, duration: 0.25, ease: "sine.out" },
         ],
-        ease: "expo.inOut", // ease the entire keyframe bloc
+        ease: "expo.inOut", 
       });
     }, el);
   }, []);
 
   const iconSize = 25;
   return (
-    <NavBarContainer className="container" ref={el}>
+    <NavBarContainer ref={el}>
       <div className="container">
         <div className="navbar-content">
           <div className="social-container">

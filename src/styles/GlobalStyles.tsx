@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     color: inherit;
     text-decoration: none;
+}
 
 html {
     font-family: 'Arial', sans-serif;
@@ -15,8 +16,9 @@ html {
 }
 
 body {
-    background: #fff; 
+    background: ${(props) => props.theme.colors.darkerBlue}; 
     color: #333;
+    color: #ffffff;
 }
 
 img, embed, object, video {
