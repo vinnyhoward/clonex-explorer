@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import styled from "styled-components";
 
 const ParentLayoutContainer = styled.div`
-  padding-left: 100px;
+  padding-left: 180px;
 `;
 
 const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
