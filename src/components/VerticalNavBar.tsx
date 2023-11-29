@@ -2,9 +2,10 @@
 import { useLayoutEffect, useRef } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
-import Logo from "./Logo";
-import { OpenSeaIcon, DiscordIcon, TwitterIcon } from "./icons";
+import Image from "next/image";
+import CloneXLogo from "../assets/images/clone-x-logo.png";
 import { defaultTheme } from "../styles/defaultTheme";
+import { OpenSeaIcon, DiscordIcon, TwitterIcon } from "./icons";
 
 const NavBarContainer = styled.div`
   .container {
@@ -31,7 +32,9 @@ const NavBarContainer = styled.div`
   .logo-wrapper {
     display: flex;
     align-items: center;
-    height: 200px;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    height: 150px;
   }
 
   .social-container {}
@@ -47,10 +50,8 @@ const VerticalNavBar = () => {
   useLayoutEffect(() => {
     gsap.context(() => {
       gsap.to(".container", {
-        keyframes: [
-          { x: 100, duration: 0.25, ease: "sine.out" },
-        ],
-        ease: "expo.inOut", 
+        keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
+        ease: "expo.inOut",
       });
     }, el);
   }, []);
@@ -84,7 +85,13 @@ const VerticalNavBar = () => {
             </div>
           </div>
           <div className="logo-wrapper">
-            <Logo rotate />
+            <Image
+              className="clone-logo letter-c"
+              alt="Clone X Logo"
+              src={CloneXLogo}
+              width={120}
+              height={120}
+            />
           </div>
         </div>
       </div>
