@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import StyledComponentsRegistry from "../lib/registry";
 import ThemeWrapper from "../lib/ThemeWrapper";
 import VerticalNavBar from "../components/VerticalNavBar";
-import ParentLayout from "../components/ParentLayout";
-import VerticalInfoBar from "../components/VerticalInfoBar";
+import { ApolloProvider } from "@/lib/apolloProvider";
+import ParentLayout from "@/components/ParentLayout";
+import VerticalInfoBar from "@/components/VerticalInfoBar";
 
 export const metadata: Metadata = {
   title: "CloneX Explorer",
@@ -19,13 +20,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StyledComponentsRegistry>
-          <ThemeWrapper>
-            <VerticalNavBar />
-            <VerticalInfoBar />
-            <ParentLayout>{children}</ParentLayout>
-          </ThemeWrapper>
-        </StyledComponentsRegistry>
+        <ApolloProvider>
+          <StyledComponentsRegistry>
+            <ThemeWrapper>
+              <VerticalNavBar />
+              <VerticalInfoBar />
+              <ParentLayout>{children}</ParentLayout>
+            </ThemeWrapper>
+          </StyledComponentsRegistry>
+        </ApolloProvider>
       </body>
     </html>
   );
