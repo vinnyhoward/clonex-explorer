@@ -28,7 +28,7 @@ const NavBarContainer = styled.div`
     margin: auto 0;
     overflow-x: hidden;
   }
-
+  
   .logo-wrapper {
     display: flex;
     align-items: center;

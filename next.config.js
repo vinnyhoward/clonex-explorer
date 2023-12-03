@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["clonex-assets.rtfkt.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "clonex-assets.rtfkt.com",
+        port: "",
+      },
+    ],
   },
 };
 
