@@ -6,6 +6,7 @@ import Image from "next/image";
 import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
+import { QueryData } from "../types";
 
 const Grid = styled.div`
   display: grid;
@@ -40,20 +41,6 @@ const SentinelDiv = styled.div`
   height: 1px;
 `;
 
-type TokenMetadata = {
-  image: string;
-};
-
-type Token = {
-  id: string;
-  tokenId: string;
-  metadata: TokenMetadata;
-};
-
-type QueryData = {
-  tokens: Token[];
-};
-
 const QUERY_SIZE = 100;
 const GET_TOKENS_QUERY = gql`
   query GetTokens($first: Int!, $after: ID) {
@@ -81,7 +68,7 @@ export default function Page() {
     setLoading(true);
 
     try {
-      const currentLastTokenId = afterCursor; 
+      const currentLastTokenId = afterCursor;
       await fetchMore({
         variables: {
           first: QUERY_SIZE,
@@ -94,7 +81,7 @@ export default function Page() {
           };
           const newLastToken =
             updatedData.tokens[updatedData.tokens.length - 1];
-          setAfterCursor(newLastToken ? newLastToken.id : null); 
+          setAfterCursor(newLastToken ? newLastToken.id : null);
           return updatedData;
         },
       });
