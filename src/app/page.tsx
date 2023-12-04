@@ -35,7 +35,7 @@ const GridItem = styled.div`
   }
 `;
 
-export const SentinelDiv = styled.div`
+const SentinelDiv = styled.div`
   width: 100%;
   height: 1px;
 `;
@@ -77,42 +77,33 @@ export default function Page() {
   const queryData = data as QueryData;
 
   const loadMoreTokens = useCallback(async () => {
-    console.log("Loading more tokens - Current cursor:", afterCursor);
-    if (loading || !queryData.tokens) {
-      console.log("Loading halted - Loading state or no tokens");
-      return;
-    }
+    if (loading || !queryData.tokens) return;
     setLoading(true);
 
-    const lastToken = queryData.tokens[queryData.tokens.length - 1];
-    const lastTokenId = lastToken ? lastToken.id : null;
     try {
+      const currentLastTokenId = afterCursor; 
       await fetchMore({
         variables: {
           first: QUERY_SIZE,
-          after: lastTokenId,
+          after: currentLastTokenId,
         },
-        updateQuery: (
-          prev: any,
-          { fetchMoreResult }: { fetchMoreResult?: any }
-        ) => {
-          const prevQueryData = prev as QueryData;
-          const fetchMoreQueryData = fetchMoreResult as QueryData;
-
-          if (!fetchMoreQueryData) return prevQueryData;
-          return {
-            tokens: [...prevQueryData.tokens, ...fetchMoreQueryData.tokens],
+        updateQuery: (prev: any, { fetchMoreResult }: any) => {
+          if (!fetchMoreResult) return prev;
+          const updatedData = {
+            tokens: [...prev.tokens, ...fetchMoreResult.tokens],
           };
+          const newLastToken =
+            updatedData.tokens[updatedData.tokens.length - 1];
+          setAfterCursor(newLastToken ? newLastToken.id : null); 
+          return updatedData;
         },
       });
-      setAfterCursor(lastTokenId);
     } catch (error) {
       console.error("Error fetching more tokens:", error);
     } finally {
       setLoading(false);
     }
-    console.log("Fetched more tokens - New cursor:", lastTokenId);
-  }, [loading, queryData.tokens]);
+  }, [loading, queryData.tokens, afterCursor, fetchMore]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -152,7 +143,6 @@ export default function Page() {
     ));
   };
 
-  console.log("data:", data);
   return (
     <main>
       <Suspense fallback={<div>Loading...</div>}>
