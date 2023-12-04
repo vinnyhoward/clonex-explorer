@@ -31,3 +31,8 @@ export type TransferHistory = {
 export type QueryData = {
   token: Token[];
 };
+
+export type QueriesData = {
+    tokens: Token[];
+  };
+  

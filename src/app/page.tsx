@@ -6,7 +6,7 @@ import Image from "next/image";
 import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { QueryData } from "../types";
+import { QueriesData } from "../types";
 
 const Grid = styled.div`
   display: grid;
@@ -61,7 +61,7 @@ export default function Page() {
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
     variables: { first: QUERY_SIZE, after: afterCursor },
   });
-  const queryData = data as QueryData;
+  const queryData = data as QueriesData;
 
   const loadMoreTokens = useCallback(async () => {
     if (loading || !queryData.tokens) return;
