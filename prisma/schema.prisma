@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Clone {
+  id        Int         @id @default(autoincrement())
+  token     Int         @unique
+  name      String
+  attributes Attribute[]
+}
+
+model Attribute {
+  id         Int     @id @default(autoincrement())
+  trait_type String
+  value      String
+  cloneId    Int    
+  clone      Clone   @relation(fields: [cloneId], references: [id])
+}
