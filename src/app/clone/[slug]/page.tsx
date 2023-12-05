@@ -45,19 +45,15 @@ export default function Page({ params }: { params: { slug: string } }) {
       return null;
     }
 
-    return typedData?.token?.map((token) => {
-      return (
-        <div key={uuidv4()}>
-          <div>
-            <h2>{token.id}</h2>
-            <h2>{token.metadata.id}</h2>
-            <h2>{token.metadata.image}</h2>
-          </div>
+    return (
+      <div key={uuidv4()}>
+        <div>
+          Placeholder
         </div>
-      );
-    });
+      </div>
+    );
   };
 
-  console.log("typedData:", typedData.token);
+  console.log("typed data:", typedData.token);
   return <div>{renderTokenMetaData()}</div>;
 }
