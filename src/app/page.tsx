@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, Suspense, useRef, useCallback } from "react";
-import styled from "styled-components";
+import Link from "next/link";
 import Image from "next/image";
+import styled from "styled-components";
 import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
@@ -118,14 +119,16 @@ export default function Page() {
 
     return queryData.tokens.map((token) => (
       <GridItem key={uuidv4()}>
-        <div className="content">
-          <Image
-            src={token.metadata.image}
-            alt={`CloneX#${token.tokenId}`}
-            width={500}
-            height={500}
-          />
-        </div>
+        <Link href={`/clone/${token.tokenId}`}>
+          <div className="content">
+            <Image
+              src={token.metadata.image}
+              alt={`CloneX#${token.tokenId}`}
+              width={500}
+              height={500}
+            />
+          </div>
+        </Link>
       </GridItem>
     ));
   };
