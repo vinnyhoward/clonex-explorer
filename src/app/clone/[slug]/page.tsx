@@ -40,10 +40,18 @@ const Container = styled.div`
   .container {
     display: flex;
     flex-direction: row;
+
+    @media (max-width: 1200px) {
+      flex-direction: column;
+    }
   }
 
   .image-section {
-    width: 60%;
+    width: 55%;
+
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
   }
 
   .clone-image {
@@ -55,9 +63,13 @@ const Container = styled.div`
   }
 
   .info-section {
-    width: 40%;
+    width: 45%;
     background-color: ${(props) => props.theme.colors.darkerBlue};
     height: 100vh;
+
+    @media (max-width: 1200px) {
+      width: 100%;
+    }
   }
 `;
 
@@ -66,7 +78,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { data } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug },
   });
-  
+
   const typedData = data as CloneData;
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
@@ -97,6 +109,5 @@ export default function Page({ params }: { params: { slug: string } }) {
     );
   };
 
-  console.log("typed data:", typedData.token);
   return <div>{renderTokenMetaData()}</div>;
 }

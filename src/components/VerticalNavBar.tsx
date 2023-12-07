@@ -5,7 +5,7 @@ import gsap from "gsap";
 import Image from "next/image";
 import CloneXLogo from "../assets/images/clone-x-logo.png";
 import { defaultTheme } from "../styles/defaultTheme";
-import { OpenSeaIcon, DiscordIcon, TwitterIcon } from "./icons";
+import { OpenSeaIcon, DiscordIcon, TwitterIcon } from "./Icons";
 
 const NavBarContainer = styled.div`
   .container {
@@ -14,7 +14,7 @@ const NavBarContainer = styled.div`
     top: 0;
     height: 100vh;
     width: 100px;
-    background-color: ${(props) => props.theme.colors.darkBlue};
+    background-color: ${(props) => props.theme.gradient.darkBlueGradient};
     z-index: 1;
     padding: 50px 0;
   }
