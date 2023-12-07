@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styled from "styled-components";
@@ -132,15 +132,13 @@ export default function Page() {
       </GridItem>
     ));
   };
-  console.log("queryData:", queryData);
+
   return (
     <main>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Grid>
-          {renderGridItem()}
-          <SentinelDiv ref={sentinelRef} />
-        </Grid>
-      </Suspense>
+      <Grid>
+        {renderGridItem()}
+        <SentinelDiv ref={sentinelRef} />
+      </Grid>
     </main>
   );
 }
