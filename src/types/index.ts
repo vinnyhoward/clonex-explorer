@@ -1,9 +1,10 @@
 export type Token = {
   __typename: "Token";
   id: string;
+  tokenId: string;
   metadata: Metadata;
   owner: Account;
-  transferHistory: TransferHistory[];
+  transferHistory?: TransferHistory[];
 };
 
 export type Metadata = {
@@ -28,11 +29,23 @@ export type TransferHistory = {
   blockNumber: string;
 };
 
-export type QueryData = {
-  token: Token[];
+export type Owner = {
+  id: string;
+}
+
+export type TokenData = {
+  id: string;
+  metadata: Metadata;
+  owner: Owner;
+  transferHistory: TransferHistory[];
 };
 
-export type QueriesData = {
+export type CloneData = {
+  id: string;
+  token: TokenData;
+};
+
+export type CloneDataList = {
     tokens: Token[];
   };
   

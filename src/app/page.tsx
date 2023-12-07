@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { QueriesData } from "../types";
+import { CloneDataList, Token } from "../types";
 
 const Grid = styled.div`
   display: grid;
@@ -62,7 +62,7 @@ export default function Page() {
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
     variables: { first: QUERY_SIZE, after: afterCursor },
   });
-  const queryData = data as QueriesData;
+  const queryData = data as CloneDataList;
 
   const loadMoreTokens = useCallback(async () => {
     if (loading || !queryData.tokens) return;
@@ -117,7 +117,7 @@ export default function Page() {
   const renderGridItem = () => {
     if (!queryData.tokens) return Array.from({ length: 100 }).map(() => null);
 
-    return queryData.tokens.map((token) => (
+    return queryData.tokens.map((token: Token) => (
       <GridItem key={uuidv4()}>
         <Link href={`/clone/${token.tokenId}`}>
           <div className="content">
@@ -132,7 +132,7 @@ export default function Page() {
       </GridItem>
     ));
   };
-
+  console.log("queryData:", queryData);
   return (
     <main>
       <Suspense fallback={<div>Loading...</div>}>

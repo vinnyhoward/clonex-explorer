@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { QueryData } from "../../../types";
+import { CloneData } from "../../../types";
 
 const GET_TOKEN_DATA_QUERY = gql`
   query GetTokens($id: String!) {
@@ -44,8 +44,10 @@ const Container = styled.div`
   .image-section {
     width: 60%;
   }
+
   .clone-image {
     height: 100vh;
+    width: 100%;
     object-fit: cover;
     margin: 0;
     padding: 0;
@@ -53,7 +55,7 @@ const Container = styled.div`
 
   .info-section {
     width: 40%;
-    background-color: ${(props) => props.theme.colors.darkBlueGradient};
+    background-color: ${(props) => props.theme.colors.darkerBlue};
     height: 100vh;
   }
 `;
@@ -63,18 +65,20 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { data, fetchMore } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug },
   });
-  const typedData = data as QueryData;
-
+  const typedData = data as CloneData;
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
       return null;
     }
-    console.log("typedData:", typedData.token.id);
+
     return (
       <Container key={uuidv4()}>
         <div className="container">
+
           <div className="image-section">
-            <img
+            <Image
+            width={1000}
+            height={1000}
               className="clone-image"
               src={typedData.token.metadata.image}
               alt={`Clone#${typedData.id}`}
@@ -86,6 +90,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               <h2>{typedData.token.id}</h2>
             </div>
           </div>
+
         </div>
       </Container>
     );
