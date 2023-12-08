@@ -4,10 +4,10 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import styled from "styled-components";
-import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { CloneDataList, Token } from "../types";
+import { GET_TOKENS_QUERY } from "../graphql/tokenQueries";
 
 const Grid = styled.div`
   display: grid;
@@ -43,17 +43,6 @@ const SentinelDiv = styled.div`
 `;
 
 const QUERY_SIZE = 100;
-const GET_TOKENS_QUERY = gql`
-  query GetTokens($first: Int!, $after: ID) {
-    tokens(first: $first, after: $after) {
-      id
-      tokenId
-      metadata {
-        image
-      }
-    }
-  }
-`;
 export default function Page() {
   const sentinelRef = useRef(null);
   const [afterCursor, setAfterCursor] = useState(null);
@@ -109,6 +98,7 @@ export default function Page() {
 
     return () => {
       if (sentinelRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(sentinelRef.current);
       }
     };

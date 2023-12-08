@@ -1,40 +1,12 @@
 "use client";
-
 import Image from "next/image";
 import styled from "styled-components";
-import { gql } from "@apollo/client";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { CloneData } from "../../../types";
 import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
-
-const GET_TOKEN_DATA_QUERY = gql`
-  query GetTokens($id: String!) {
-    token(id: $id) {
-      id
-      metadata {
-        id
-        image
-      }
-      owner {
-        id
-      }
-      transferHistory {
-        id
-        gasPrice
-        receiver {
-          id
-        }
-        sender {
-          id
-        }
-        transactionHash
-        timestamp
-        blockNumber
-      }
-    }
-  }
-`;
+import { TraitList } from "../../../components/TraitList/TraitList";
+import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
 
 const Container = styled.div`
   .container {
@@ -78,8 +50,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { data } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug },
   });
-
   const typedData = data as CloneData;
+  
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
       return null;
@@ -103,6 +75,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               tokenId={typedData.token.id}
               ownerAddress={typedData.token.owner.id}
             />
+            <TraitList />
           </div>
         </div>
       </Container>
