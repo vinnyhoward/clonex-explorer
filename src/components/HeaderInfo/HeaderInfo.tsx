@@ -7,9 +7,10 @@ const HeaderInfoContainer = styled.div`
   padding: 30px;
 
   h2 {
-    font-size: 6rem;
+    font-size: 128px;
     font-weight: 900;
     text-align: center;
+    font-family: ${(props) =>  props.theme.fontFamily.outfit};
   }
 
   .owner-container {

@@ -42,7 +42,7 @@ export const GET_TOKEN_DATA_QUERY = gql`
 
 export const GET_TOKEN_TRANSACTION_HISTORY = gql`
   query GetTokenTransactions($id: String!, $first: Int!) {
-    tokens(where: { $id: string }, $first: Int) {
+    tokens(where: { id: $id }, first: $first) {
         transferHistory {
       receiver {
         id
