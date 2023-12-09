@@ -109,25 +109,43 @@ const VerticalNavBar = () => {
           <div className="bottom-section">
             <div className="social-container">
               <div className="icon-wrapper">
-                <OpenSeaIcon
-                  color={defaultTheme.colors.white}
-                  width={iconSize}
-                  height={iconSize}
-                />
+                <a
+                  href="https://opensea.io/collection/clonex"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <OpenSeaIcon
+                    color={defaultTheme.colors.white}
+                    width={iconSize}
+                    height={iconSize}
+                  />
+                </a>
               </div>
               <div className="icon-wrapper">
-                <DiscordIcon
-                  color={defaultTheme.colors.white}
-                  width={iconSize}
-                  height={iconSize}
-                />
+                <a
+                  href="https://discord.gg/rtfkt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <DiscordIcon
+                    color={defaultTheme.colors.white}
+                    width={iconSize}
+                    height={iconSize}
+                  />
+                </a>
               </div>
               <div className="icon-wrapper">
-                <TwitterIcon
-                  color={defaultTheme.colors.white}
-                  width={iconSize}
-                  height={iconSize}
-                />
+                <a
+                  href="https://twitter.com/rtfktstudios"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <TwitterIcon
+                    color={defaultTheme.colors.white}
+                    width={iconSize}
+                    height={iconSize}
+                  />
+                </a>
               </div>
             </div>
 
