@@ -1,15 +1,15 @@
 import { gql } from "@apollo/client";
 
 export const GET_TOKENS_QUERY = gql`
-query GetTokens($first: Int!, $after: ID) {
-  tokens(first: $first, after: $after) {
-    id
-    tokenId
-    metadata {
-      image
+  query GetTokens($first: Int!, $after: ID) {
+    tokens(first: $first, after: $after) {
+      id
+      tokenId
+      metadata {
+        image
+      }
     }
   }
-}
 `;
 
 export const GET_TOKEN_DATA_QUERY = gql`
@@ -36,6 +36,25 @@ export const GET_TOKEN_DATA_QUERY = gql`
         timestamp
         blockNumber
       }
+    }
+  }
+`;
+
+export const GET_TOKEN_TRANSACTION_HISTORY = gql`
+  query GetTokenTransactions($id: String!, $first: Int!) {
+    tokens(where: { $id: string }, $first: Int) {
+        transferHistory {
+      receiver {
+        id
+      }
+      sender {
+        id
+      }
+      timestamp
+      transactionHash
+      blockNumber
+    }
+    tokenId
     }
   }
 `;

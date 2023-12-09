@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
@@ -51,7 +52,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     variables: { id: slug },
   });
   const typedData = data as CloneData;
-  
+
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
       return null;
