@@ -1,3 +1,16 @@
 export { OpenSeaIcon } from "./OpenSeaIcon";
 export { DiscordIcon } from "./DiscordIcon";
 export { TwitterIcon } from "./TwitterIcon";
+export { AccessoriesIcon } from "./AccessoriesIcon";
+export { BackIcon } from "./BackIcon";
+export { ClothingIcon } from "./ClothingIcon";
+export { EyeColorIcon } from "./EyeColorIcon";
+export { EyeWearIcon } from "./EyeWearIcon";
+export { FacialFeatureIcon } from "./FacialFeatureIcon";
+export { HairIcon } from "./HairIcon";
+export { HelmetIcon } from "./HelmetIcon";
+export { JewelryIcon } from "./JewelryIcon";
+export { MouthIcon } from "./MouthIcon";
+export { TypeIcon } from "./TypeIcon";
+export { HomeIcon } from "./HomeIcon";
+export { TransactionIcon } from "./TransactionIcon";

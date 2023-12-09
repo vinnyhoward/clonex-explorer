@@ -1,22 +1,28 @@
 "use client";
 import { useLayoutEffect, useRef } from "react";
+import Link from "next/link";
 import styled from "styled-components";
 import gsap from "gsap";
-import Image from "next/image";
-import CloneXLogo from "../assets/images/clone-x-logo.png";
-import { defaultTheme } from "../styles/defaultTheme";
-import { OpenSeaIcon, DiscordIcon, TwitterIcon } from "./Icons";
+import { RTFKTLogo } from "@/components/RTFKTLogo";
+import { defaultTheme } from "@/styles/defaultTheme";
+import {
+  OpenSeaIcon,
+  DiscordIcon,
+  TwitterIcon,
+  TransactionIcon,
+  HomeIcon,
+} from "./Icons";
 
 const NavBarContainer = styled.div`
   .container {
     position: fixed;
-    left: -100px;
+    /* left: -100px; */
     top: 0;
     height: 100vh;
     width: 100px;
     background-color: ${(props) => props.theme.gradient.darkBlueGradient};
     z-index: 1;
-    padding: 50px 0;
+    padding: 50px 12px;
   }
 
   .navbar-content {
@@ -27,20 +33,36 @@ const NavBarContainer = styled.div`
     align-items: center;
     margin: auto 0;
     overflow-x: hidden;
+    padding-bottom: 50px;
   }
-  
+
   .logo-wrapper {
     display: flex;
     align-items: center;
     transform: rotate(-90deg);
-    transform-origin: center;
-    height: 150px;
+    margin-bottom: 26px;
   }
 
-  .social-container {}
+  .social-container {
+    margin-bottom: 30px;
+  }
 
   .icon-wrapper {
     margin: 20px 0;
+    cursor: pointer;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background-color: ${(props) => props.theme.colors.slateGrey};
+    margin-bottom: 120px;
+  }
+
+  .bottom-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -48,12 +70,12 @@ const VerticalNavBar = () => {
   const el = useRef(null);
 
   useLayoutEffect(() => {
-    gsap.context(() => {
-      gsap.to(".container", {
-        keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
-        ease: "expo.inOut",
-      });
-    }, el);
+    // gsap.context(() => {
+    //   gsap.to(".container", {
+    //     keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
+    //     ease: "expo.inOut",
+    //   });
+    // }, el);
   }, []);
 
   const iconSize = 25;
@@ -61,37 +83,59 @@ const VerticalNavBar = () => {
     <NavBarContainer ref={el}>
       <div className="container">
         <div className="navbar-content">
-          <div className="social-container">
-            <div className="icon-wrapper">
-              <OpenSeaIcon
-                color={defaultTheme.colors.white}
-                width={iconSize}
-                height={iconSize}
-              />
-            </div>
-            <div className="icon-wrapper">
-              <DiscordIcon
-                color={defaultTheme.colors.white}
-                width={iconSize}
-                height={iconSize}
-              />
-            </div>
-            <div className="icon-wrapper">
-              <TwitterIcon
-                color={defaultTheme.colors.white}
-                width={iconSize}
-                height={iconSize}
-              />
+          <div className="top-section">
+            <div className="nav-container">
+              <div className="icon-wrapper">
+                <Link href="/">
+                  <HomeIcon
+                    color={defaultTheme.colors.white}
+                    width={iconSize}
+                    height={iconSize}
+                  />
+                </Link>
+              </div>
+              <div className="icon-wrapper">
+                <Link href="/activity">
+                  <TransactionIcon
+                    color={defaultTheme.colors.white}
+                    width={iconSize}
+                    height={iconSize}
+                  />
+                </Link>
+              </div>
             </div>
           </div>
-          <div className="logo-wrapper">
-            <Image
-              className="clone-logo letter-c"
-              alt="Clone X Logo"
-              src={CloneXLogo}
-              width={120}
-              height={120}
-            />
+
+          <div className="bottom-section">
+            <div className="social-container">
+              <div className="icon-wrapper">
+                <OpenSeaIcon
+                  color={defaultTheme.colors.white}
+                  width={iconSize}
+                  height={iconSize}
+                />
+              </div>
+              <div className="icon-wrapper">
+                <DiscordIcon
+                  color={defaultTheme.colors.white}
+                  width={iconSize}
+                  height={iconSize}
+                />
+              </div>
+              <div className="icon-wrapper">
+                <TwitterIcon
+                  color={defaultTheme.colors.white}
+                  width={iconSize}
+                  height={iconSize}
+                />
+              </div>
+            </div>
+
+            <div className="divider" />
+
+            <div className="logo-wrapper">
+              <RTFKTLogo />
+            </div>
           </div>
         </div>
       </div>

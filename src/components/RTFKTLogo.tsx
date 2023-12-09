@@ -8,7 +8,7 @@ interface LogoProps {
   color?: string;
 }
 
-const Logo: React.FC<LogoProps> = ({
+export const RTFKTLogo: React.FC<LogoProps> = ({
   width = 155,
   height = 34,
   rotate = false,
@@ -53,4 +53,3 @@ const Logo: React.FC<LogoProps> = ({
   );
 };
 
-export default Logo;
