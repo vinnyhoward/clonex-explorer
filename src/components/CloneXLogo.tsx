@@ -9,9 +9,9 @@ const CloneXLogoContainer = styled.div`
 
   .parent-wrapper {
     position: fixed;
-    top: 0;
+    bottom: 0;
     right: 0;
-    margin: 50px;
+    margin: 40px;
     z-index: 2;
   }
 
@@ -24,8 +24,8 @@ const CloneXLogoContainer = styled.div`
 
   .sentinel-shadow {
     position: fixed;
-    left: 83%;
-    top: 6%;
+    left: 86%;
+    bottom: 6%;
     width: 190px;
     height: 70px;
     z-index: 1;
@@ -83,7 +83,7 @@ export const Background: React.FC<LogoProps> = ({
       <path
         fill={color}
         stroke={strokeColor}
-        stroke-width="3"
+        stroke-width="5"
         d="M2 113V12.299L9.05263 2H270V91.2577L255.111 113H2Z"
       />
     </svg>

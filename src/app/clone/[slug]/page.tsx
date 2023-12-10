@@ -1,26 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { CloneData } from "../../../types";
 import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
 import { TraitList } from "../../../components/TraitList/TraitList";
 import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
+import { Section } from "./types";
 
 const Container = styled.div`
   .container {
     display: flex;
     flex-direction: row;
-
-    @media (max-width: 1200px) {
+    z @media (max-width: 1200px) {
       flex-direction: column;
     }
   }
 
   .image-section {
-    width: 55%;
+    width: 60%;
 
     @media (max-width: 1200px) {
       width: 100%;
@@ -36,7 +36,7 @@ const Container = styled.div`
   }
 
   .info-section {
-    width: 45%;
+    width: 40%;
     background-color: ${(props) => props.theme.colors.darkerBlue};
     height: 100vh;
 
@@ -52,6 +52,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     variables: { id: slug },
   });
   const typedData = data as CloneData;
+  const [section, setSection] = useState(Section.TraitList);
 
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
@@ -59,7 +60,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
 
     return (
-      <Container key={uuidv4()}>
+      <Container>
         <div className="container">
           <div className="image-section">
             <Image
@@ -75,6 +76,8 @@ export default function Page({ params }: { params: { slug: string } }) {
             <HeaderInfo
               tokenId={typedData.token.id}
               ownerAddress={typedData.token.owner.id}
+              setSection={setSection}
+              section={section}
             />
             <TraitList />
           </div>
