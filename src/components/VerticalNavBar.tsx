@@ -1,8 +1,8 @@
 "use client";
+
 import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";
-import gsap from "gsap";
 import { RTFKTLogo } from "@/components/RTFKTLogo";
 import { defaultTheme } from "@/styles/defaultTheme";
 import {
@@ -16,7 +16,6 @@ import {
 const NavBarContainer = styled.div`
   .container {
     position: fixed;
-    /* left: -100px; */
     top: 0;
     height: 100vh;
     width: 100px;
@@ -70,6 +69,7 @@ const VerticalNavBar = () => {
   const el = useRef(null);
 
   useLayoutEffect(() => {
+    // TODO: Need to redo animation
     // gsap.context(() => {
     //   gsap.to(".container", {
     //     keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
@@ -148,9 +148,7 @@ const VerticalNavBar = () => {
                 </a>
               </div>
             </div>
-
             <div className="divider" />
-
             <div className="logo-wrapper">
               <RTFKTLogo />
             </div>

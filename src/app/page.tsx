@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { CloneDataList, Token } from "../types";
 import { GET_TOKENS_QUERY } from "../graphql/tokenQueries";
+import { CloneXLogo } from "@/components/CloneXLogo";
 
 const Grid = styled.div`
   display: grid;
@@ -125,6 +126,10 @@ export default function Page() {
 
   return (
     <main>
+
+      <div className="logo-wrapper">
+        <CloneXLogo />
+      </div>
       <Grid>
         {renderGridItem()}
         <SentinelDiv ref={sentinelRef} />
