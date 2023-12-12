@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -126,7 +125,6 @@ export default function Page() {
 
   return (
     <main>
-
       <div className="logo-wrapper">
         <CloneXLogo />
       </div>

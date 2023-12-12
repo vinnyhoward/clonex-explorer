@@ -31,7 +31,7 @@ export type TransferHistory = {
 
 export type Owner = {
   id: string;
-}
+};
 
 export type TokenData = {
   id: string;
@@ -46,6 +46,17 @@ export type CloneData = {
 };
 
 export type CloneDataList = {
-    tokens: Token[];
-  };
-  
+  tokens: Token[];
+};
+
+export type CloneTraits = {
+  id: number;
+  token: string;
+  name: string;
+  attributes: string;
+};
+
+export type CloneTraitsList = {
+  trait_type: string;
+  value: string;
+};

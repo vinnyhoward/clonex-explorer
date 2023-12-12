@@ -1,25 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { CloneTraits, CloneTraitsList } from "../../types";
 
 const TraitListContainer = styled.div`
   /* Add your styling here */
 `;
 
-interface TraitListProps {}
-
-async function getData(tokenId: string) {
-  const res = await fetch(`/api/get-clone-details/${tokenId}}`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
+interface TraitListProps {
+  tokenId: string;
 }
+export const TraitList: React.FC<TraitListProps> = ({ tokenId }) => {
+  const [traits, setTraits] = useState<CloneTraitsList>();
+  useEffect(() => {
+    const getTraitData = async () => {
+      const data = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/get-clone-details/${encodeURIComponent(tokenId)}`
+      );
+      const dataJson: CloneTraits = await data.json();
+      const traits: CloneTraitsList = JSON.parse(dataJson.attributes);
+      setTraits(traits);
+    };
 
-export const TraitList: React.FC<TraitListProps> = async () => {
-  const data = await getData("1");
-  console.log("data", data);
+    getTraitData();
+  }, [tokenId]);
+
+  console.log("traits:", traits);
   return (
     <TraitListContainer>
       {/* Add your component content here */}

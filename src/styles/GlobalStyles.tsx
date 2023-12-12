@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    background: ${(props) => props.theme.colors.darkerBlue}; 
+    background: ${(props) => props.theme.colors.blue}; 
     color: #333;
     color: #ffffff;
 }

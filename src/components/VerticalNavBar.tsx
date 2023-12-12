@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";
+import gsap from "gsap";
 import { RTFKTLogo } from "@/components/RTFKTLogo";
 import { defaultTheme } from "@/styles/defaultTheme";
 import {
@@ -17,9 +18,10 @@ const NavBarContainer = styled.div`
   .container {
     position: fixed;
     top: 0;
+    left: -100px;
     height: 100vh;
     width: 100px;
-    background-color: ${(props) => props.theme.gradient.darkBlueGradient};
+    background-color: ${(props) => props.theme.colors.darkerBlue};
     z-index: 1;
     padding: 50px 12px;
   }
@@ -69,13 +71,12 @@ const VerticalNavBar = () => {
   const el = useRef(null);
 
   useLayoutEffect(() => {
-    // TODO: Need to redo animation
-    // gsap.context(() => {
-    //   gsap.to(".container", {
-    //     keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
-    //     ease: "expo.inOut",
-    //   });
-    // }, el);
+    gsap.context(() => {
+      gsap.to(".container", {
+        keyframes: [{ x: 100, duration: 0.25, ease: "sine.out" }],
+        ease: "expo.inOut",
+      });
+    }, el);
   }, []);
 
   const iconSize = 25;

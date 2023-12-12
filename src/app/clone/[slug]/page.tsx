@@ -79,7 +79,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               setSection={setSection}
               section={section}
             />
-            <TraitList />
+            <TraitList tokenId={typedData.token.id} />
           </div>
         </div>
       </Container>

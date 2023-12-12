@@ -24,13 +24,13 @@ const CloneXLogoContainer = styled.div`
 
   .sentinel-shadow {
     position: fixed;
-    left: 86%;
-    bottom: 6%;
-    width: 190px;
+    bottom: 0;
+    right: 0;
+    width: 150px;
     height: 70px;
     z-index: 1;
     background-color: red;
-    box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.5);
+    margin: 50px;
   }
 
   .background-wrapper {
