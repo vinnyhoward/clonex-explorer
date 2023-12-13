@@ -4,6 +4,7 @@ export { TwitterIcon } from "./TwitterIcon";
 export { AccessoriesIcon } from "./AccessoriesIcon";
 export { BackIcon } from "./BackIcon";
 export { ClothingIcon } from "./ClothingIcon";
+export { DNAIcon } from "./DNAIcon";
 export { EyeColorIcon } from "./EyeColorIcon";
 export { EyeWearIcon } from "./EyeWearIcon";
 export { FacialFeatureIcon } from "./FacialFeatureIcon";
