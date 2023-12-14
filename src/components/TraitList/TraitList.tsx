@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { CloneTraits, CloneTraitsList } from "../../types";
+import { CloneTraitsList } from "../../types";
 import {
   AccessoriesIcon,
   BackIcon,
@@ -59,7 +59,8 @@ const TraitListContainer = styled.div`
     width: 25px;
   }
 
-  .trait-name, .trait-header {
+  .trait-name,
+  .trait-header {
     text-transform: uppercase;
   }
 `;
@@ -80,12 +81,10 @@ enum TraitType {
 }
 
 interface TraitListProps {
-  tokenId: string;
+  traits: CloneTraitsList[];
 }
 
-export const TraitList: React.FC<TraitListProps> = ({ tokenId }) => {
-  const [traits, setTraits] = useState<CloneTraitsList[]>([]);
-
+export const TraitList: React.FC<TraitListProps> = ({ traits }) => {
   const getCloneIcon = (trait: string) => {
     switch (trait) {
       case TraitType.Type:
@@ -159,7 +158,7 @@ export const TraitList: React.FC<TraitListProps> = ({ tokenId }) => {
       if (index === 0) {
         extraStyles = "top";
       }
-      console.log('trait type:', trait.trait_type);
+
       return (
         <div className={`row ${extraStyles}`} key={index}>
           <div className="trait-sub-header">
@@ -171,21 +170,6 @@ export const TraitList: React.FC<TraitListProps> = ({ tokenId }) => {
       );
     });
   };
-
-  useEffect(() => {
-    const getTraitData = async () => {
-      const data = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/api/get-clone-details/${encodeURIComponent(tokenId)}`
-      );
-      const dataJson: CloneTraits = await data.json();
-      const traits: CloneTraitsList[] = JSON.parse(dataJson.attributes);
-      setTraits(traits);
-    };
-
-    getTraitData();
-  }, [tokenId]);
 
   return <TraitListContainer>{renderTraitList()}</TraitListContainer>;
 };

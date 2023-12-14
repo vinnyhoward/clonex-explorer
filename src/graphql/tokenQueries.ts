@@ -13,7 +13,7 @@ export const GET_TOKENS_QUERY = gql`
 `;
 
 export const GET_TOKEN_DATA_QUERY = gql`
-  query GetTokens($id: String!) {
+  query GetTokenData($id: String!) {
     token(id: $id) {
       id
       metadata {
@@ -23,19 +23,17 @@ export const GET_TOKEN_DATA_QUERY = gql`
       owner {
         id
       }
-      transferHistory {
-        id
-        gasPrice
-        receiver {
-          id
-        }
-        sender {
-          id
-        }
-        transactionHash
-        timestamp
-        blockNumber
-      }
+    }
+
+    transfers(first: 10, where: { tokenId: $id }) {
+      blockNumber
+      blockTimestamp
+      from
+      gasPrice
+      id
+      to
+      tokenId
+      transactionHash
     }
   }
 `;
@@ -43,18 +41,18 @@ export const GET_TOKEN_DATA_QUERY = gql`
 export const GET_TOKEN_TRANSACTION_HISTORY = gql`
   query GetTokenTransactions($id: String!, $first: Int!) {
     tokens(where: { id: $id }, first: $first) {
-        transferHistory {
-      receiver {
-        id
+      transferHistory {
+        receiver {
+          id
+        }
+        sender {
+          id
+        }
+        timestamp
+        transactionHash
+        blockNumber
       }
-      sender {
-        id
-      }
-      timestamp
-      transactionHash
-      blockNumber
-    }
-    tokenId
+      tokenId
     }
   }
 `;

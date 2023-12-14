@@ -1,19 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CloneData } from "../../../types";
+import { TokenDataQueryResult } from "../../../types";
 import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
 import { TraitList } from "../../../components/TraitList/TraitList";
 import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
-import { Section } from "./types";
+import { CloneTraits, CloneTraitsList, Section } from "../../../types";
 
 const Container = styled.div`
   .container {
     display: flex;
     flex-direction: row;
-    z @media (max-width: 1200px) {
+
+    @media (max-width: 1200px) {
       flex-direction: column;
     }
   }
@@ -50,13 +51,23 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { data } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug },
   });
-  const typedData = data as CloneData;
+  const typedData = data as TokenDataQueryResult;
   const [section, setSection] = useState(Section.TraitList);
+  const [traits, setTraits] = useState<CloneTraitsList[]>([]);
 
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
       return null;
     }
+
+    const renderSection = () => {
+      switch (section) {
+        case Section.TraitList:
+          return <TraitList traits={traits} />;
+        default:
+          return null;
+      }
+    };
 
     return (
       <Container>
@@ -67,7 +78,7 @@ export default function Page({ params }: { params: { slug: string } }) {
               height={1000}
               className="clone-image"
               src={typedData.token.metadata.image}
-              alt={`Clone#${typedData.id}`}
+              alt={`Clone#${typedData.token.id}`}
             />
           </div>
 
@@ -78,12 +89,27 @@ export default function Page({ params }: { params: { slug: string } }) {
               setSection={setSection}
               section={section}
             />
-            <TraitList tokenId={typedData.token.id} />
+            {renderSection()}
           </div>
         </div>
       </Container>
     );
   };
+
+  useEffect(() => {
+    const getTraitData = async () => {
+      const fetchedData = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL
+        }/api/get-clone-details/${encodeURIComponent(typedData.token.id)}`
+      );
+      const dataJson: CloneTraits = await fetchedData.json();
+      const traits: CloneTraitsList[] = JSON.parse(dataJson.attributes);
+      setTraits(traits);
+    };
+
+    getTraitData();
+  }, [typedData.token.id]);  
 
   return <div>{renderTokenMetaData()}</div>;
 }

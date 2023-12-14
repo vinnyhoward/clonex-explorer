@@ -24,6 +24,11 @@ const NavBarContainer = styled.div`
     background-color: ${(props) => props.theme.colors.darkerBlue};
     z-index: 1;
     padding: 50px 12px;
+
+    @media (max-width: 700px) {
+      width: 70px;
+      padding: 50px 0px;
+    }
   }
 
   .navbar-content {

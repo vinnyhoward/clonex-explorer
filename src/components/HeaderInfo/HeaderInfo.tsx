@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import styled from "styled-components";
-import { Section } from "../../app/clone/[slug]/types";
+import { Section } from "../../types";
 import { glitchText, GlitchMode } from "../../utils/glitchText";
 import { truncateWalletAddress } from "../../utils/truncateWalletAddress";
 
