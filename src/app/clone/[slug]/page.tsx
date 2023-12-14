@@ -6,6 +6,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { TokenDataQueryResult } from "../../../types";
 import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
 import { TraitList } from "../../../components/TraitList/TraitList";
+import { TransactionList } from "../../../components/TransactionList/TransactionList";
 import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
 import { CloneTraits, CloneTraitsList, Section } from "../../../types";
 
@@ -65,7 +66,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         case Section.TraitList:
           return <TraitList traits={traits} />;
         default:
-          return null;
+          return <TransactionList transactions={typedData.transfers} />;
       }
     };
 

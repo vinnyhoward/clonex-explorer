@@ -14,8 +14,6 @@ export async function GET(
         },
       });
 
-      console.log(cloneData);
-
       if (!cloneData) {
         return new NextResponse("Clone not found", { status: 404 });
       }

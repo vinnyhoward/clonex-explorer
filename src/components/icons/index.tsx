@@ -15,3 +15,4 @@ export { MouthIcon } from "./MouthIcon";
 export { TypeIcon } from "./TypeIcon";
 export { HomeIcon } from "./HomeIcon";
 export { TransactionIcon } from "./TransactionIcon";
+export { TransferIcon } from "./TransferIcon";
