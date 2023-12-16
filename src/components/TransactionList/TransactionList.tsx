@@ -68,6 +68,18 @@ const TransactionListContainer = styled.div`
     flex-direction: row;
   }
 
+  .table-header {
+    padding: 5px 30px;
+    margin-left: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-family: ${(props) => props.theme.fontFamily.robotoFlex};
+    font-weight: 500;
+    font-size: ${(props) => props.theme.fontSize.md};
+    color: ${(props) => props.theme.colors.slateGrey};
+  }
+
   @media (max-width: 600px) {
     .transfer-item {
       flex-direction: column;
@@ -123,6 +135,12 @@ export const TransactionList: React.FC<TraitListProps> = ({
   console.log("transactions", transactions);
   return (
     <TransactionListContainer>
+      <div className="table-header">
+        <div className="transfer-type"></div>
+        <div className="transfer-from">From</div>
+        <div className="transfer-to">To</div>
+        <div className="transfer-time">Time</div>
+      </div>
       {renderTransactions()}
       {canLoadMore ? (
         <div className="show-more-wrapper">

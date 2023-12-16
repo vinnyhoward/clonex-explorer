@@ -89,8 +89,8 @@ export default function Page({ params }: { params: { slug: string } }) {
           setCanLoadMore(false);
         }
 
-        console.log('fetch more: ', fetchMoreResult.transfers[0].tokenId);
-        console.log('prev: ', transactions[0]?.tokenId);
+        console.log("fetch more: ", fetchMoreResult.transfers[0].tokenId);
+        console.log("prev: ", transactions[0]?.tokenId);
         if (fetchMoreResult.transfers[0].tokenId === transactions[0]?.tokenId) {
           return setCanLoadMore(false);
         }
@@ -156,18 +156,23 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     const getTraitData = async () => {
-      const fetchedData = await fetch(
-        `${
-          process.env.NEXT_PUBLIC_API_URL
-        }/api/get-clone-details/${encodeURIComponent(typedData.token.id)}`
-      );
-      const dataJson: CloneTraits = await fetchedData.json();
-      const traits: CloneTraitsList[] = JSON.parse(dataJson.attributes);
-      setTraits(traits);
+      try {
+        if (!typedData.token) return;
+        const fetchedData = await fetch(
+          `${
+            process.env.NEXT_PUBLIC_API_URL
+          }/api/get-clone-details/${encodeURIComponent(typedData.token.id)}`
+        );
+        const dataJson: CloneTraits = await fetchedData.json();
+        const traits: CloneTraitsList[] = JSON.parse(dataJson.attributes);
+        setTraits(traits);
+      } catch (error) {
+        console.error("Error fetching trait data:", error);
+      }
     };
 
     getTraitData();
-  }, [typedData.token.id]);
+  }, []);
 
   useEffect(() => {
     if (!typedData.transfers) return;
@@ -181,7 +186,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     }
 
     setTransactions(typedData.transfers);
-  }, [typedData.transfers]);
+  }, [typedData.transfers, transactions]);
 
   return <div>{renderTokenMetaData()}</div>;
 }
