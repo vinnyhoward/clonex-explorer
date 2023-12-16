@@ -13,7 +13,7 @@ export const GET_TOKENS_QUERY = gql`
 `;
 
 export const GET_TOKEN_DATA_QUERY = gql`
-  query GetTokenData($id: String!) {
+  query GetTokenData($id: String!, $first: Int!, $skip: Int!) {
     token(id: $id) {
       id
       metadata {
@@ -25,7 +25,7 @@ export const GET_TOKEN_DATA_QUERY = gql`
       }
     }
 
-    transfers(first: 10, where: { tokenId: $id }) {
+    transfers(first: $first, skip: $skip, where: { tokenId: $id }) {
       blockNumber
       blockTimestamp
       from

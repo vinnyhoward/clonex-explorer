@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 import { TransferIcon } from "../Icons";
 import { Transfer } from "../../types";
 import { shortenAddress, timeAgo } from "../../utils";
@@ -82,9 +83,15 @@ const TransactionListContainer = styled.div`
 
 interface TraitListProps {
   transactions: Transfer[];
+  loadMoreTokens: () => void;
+  canLoadMore: boolean;
 }
 
-export const TransactionList: React.FC<TraitListProps> = ({ transactions }) => {
+export const TransactionList: React.FC<TraitListProps> = ({
+  transactions,
+  loadMoreTokens,
+  canLoadMore,
+}) => {
   const lastIndex = transactions.length - 1;
 
   const renderTransactions = () => {
@@ -97,9 +104,9 @@ export const TransactionList: React.FC<TraitListProps> = ({ transactions }) => {
       if (index == lastIndex) {
         extraStyles = "bottom";
       }
-      console.log(`transfer-item ${extraStyles} and index is ${index}`);
+
       return (
-        <div key={transaction.id} className={`transfer-item ${extraStyles}`}>
+        <div key={uuidv4()} className={`transfer-item ${extraStyles}`}>
           <div className="transfer-icon-wrapper">
             <div className="transfer-icon">
               <TransferIcon />
@@ -113,13 +120,17 @@ export const TransactionList: React.FC<TraitListProps> = ({ transactions }) => {
       );
     });
   };
-
+  console.log("transactions", transactions);
   return (
     <TransactionListContainer>
       {renderTransactions()}
-      {<div className="show-more-wrapper">
-        <div className="show-more">Show More</div>
-      </div>}
+      {canLoadMore ? (
+        <div className="show-more-wrapper">
+          <div onClick={loadMoreTokens} className="show-more">
+            Show More
+          </div>
+        </div>
+      ) : null}
     </TransactionListContainer>
   );
 };

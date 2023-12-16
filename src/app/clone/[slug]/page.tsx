@@ -8,7 +8,12 @@ import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
 import { TraitList } from "../../../components/TraitList/TraitList";
 import { TransactionList } from "../../../components/TransactionList/TransactionList";
 import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
-import { CloneTraits, CloneTraitsList, Section } from "../../../types";
+import {
+  CloneTraits,
+  CloneTraitsList,
+  Section,
+  Transfer,
+} from "../../../types";
 
 const Container = styled.div`
   .container {
@@ -54,14 +59,53 @@ const Container = styled.div`
   }
 `;
 
+const QUERY_SIZE = 5;
 export default function Page({ params }: { params: { slug: string } }) {
   const slug = params.slug;
-  const { data } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
-    variables: { id: slug },
-  });
-  const typedData = data as TokenDataQueryResult;
   const [section, setSection] = useState(Section.TraitList);
   const [traits, setTraits] = useState<CloneTraitsList[]>([]);
+  const [transactions, setTransactions] = useState<Transfer[]>([]);
+  const [skipAmount, setSkipAmount] = useState<number>(0);
+  const [canLoadMore, setCanLoadMore] = useState<boolean>(true);
+
+  const { data, fetchMore } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
+    variables: { id: slug, first: QUERY_SIZE, skip: skipAmount },
+  });
+  const typedData = data as TokenDataQueryResult;
+
+  const loadMoreTokens = async () => {
+    if (!typedData.token) return;
+    const currentSkipAmount = skipAmount;
+    const response = await fetchMore({
+      variables: {
+        id: slug,
+        first: QUERY_SIZE,
+        skip: currentSkipAmount,
+      },
+      updateQuery: (prev: any, { fetchMoreResult }: any) => {
+        if (!fetchMoreResult) return prev;
+
+        if (fetchMoreResult.transfers.length < 5) {
+          setCanLoadMore(false);
+        }
+
+        console.log('fetch more: ', fetchMoreResult.transfers[0].tokenId);
+        console.log('prev: ', transactions[0]?.tokenId);
+        if (fetchMoreResult.transfers[0].tokenId === transactions[0]?.tokenId) {
+          return setCanLoadMore(false);
+        }
+
+        setTransactions((prev) => {
+          if (!prev) return fetchMoreResult.transfers;
+          return [...prev, ...fetchMoreResult.transfers];
+        });
+      },
+    });
+
+    if (response.networkStatus === 7) {
+      setSkipAmount(currentSkipAmount + QUERY_SIZE);
+    }
+  };
 
   const renderTokenMetaData = () => {
     if (!typedData || !typedData.token) {
@@ -73,7 +117,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         case Section.TraitList:
           return <TraitList traits={traits} />;
         default:
-          return <TransactionList transactions={typedData.transfers} />;
+          return (
+            <TransactionList
+              loadMoreTokens={loadMoreTokens}
+              transactions={transactions}
+              canLoadMore={canLoadMore}
+            />
+          );
       }
     };
 
@@ -118,6 +168,20 @@ export default function Page({ params }: { params: { slug: string } }) {
 
     getTraitData();
   }, [typedData.token.id]);
+
+  useEffect(() => {
+    if (!typedData.transfers) return;
+
+    if (typedData.transfers.length < 5) {
+      setCanLoadMore(false);
+    }
+
+    if (typedData.transfers[0].tokenId === transactions[0]?.tokenId) {
+      return setCanLoadMore(false);
+    }
+
+    setTransactions(typedData.transfers);
+  }, [typedData.transfers]);
 
   return <div>{renderTokenMetaData()}</div>;
 }
