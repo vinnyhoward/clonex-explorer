@@ -42,45 +42,52 @@ const SentinelDiv = styled.div`
   height: 1px;
 `;
 
-const QUERY_SIZE = 100;
+const QUERY_SIZE = 50;
 export default function Page() {
-  const sentinelRef = useRef(null);
-  const [afterCursor, setAfterCursor] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [skipAmount, setSkipAmount] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [tokens, setTokens] = useState<Token[]>([]);
 
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
-    variables: { first: QUERY_SIZE, after: afterCursor },
+    variables: { first: QUERY_SIZE, skip: skipAmount },
   });
   const queryData = data as CloneDataList;
 
   const loadMoreTokens = useCallback(async () => {
     if (loading || !queryData.tokens) return;
     setLoading(true);
+    const nextScrollPosition = window.scrollY;
 
     try {
-      const currentLastTokenId = afterCursor;
-      await fetchMore({
+      const currentSkipAmount = skipAmount;
+      const response = await fetchMore({
         variables: {
           first: QUERY_SIZE,
-          after: currentLastTokenId,
+          skip: currentSkipAmount,
         },
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           if (!fetchMoreResult) return prev;
-          const updatedData = {
-            tokens: [...prev.tokens, ...fetchMoreResult.tokens],
-          };
-          const newLastToken =
-            updatedData.tokens[updatedData.tokens.length - 1];
-          setAfterCursor(newLastToken ? newLastToken.id : null);
-          return updatedData;
+
+          setTokens((prevTokens) => {
+            if (!prevTokens) return fetchMoreResult.tokens;
+            return [...prevTokens, ...fetchMoreResult.tokens];
+          });
+
+          const newSkipAmount = currentSkipAmount + QUERY_SIZE;
+          setSkipAmount(newSkipAmount);
         },
       });
+
+      if (response.networkStatus === 7) {
+        window.scrollTo(0, nextScrollPosition - 100);
+      }
     } catch (error) {
       console.error("Error fetching more tokens:", error);
     } finally {
       setLoading(false);
     }
-  }, [loading, queryData.tokens, afterCursor, fetchMore]);
+  }, [loading, queryData.tokens, fetchMore, skipAmount]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -89,7 +96,7 @@ export default function Page() {
           loadMoreTokens();
         }
       },
-      { threshold: 1.0 }
+      { threshold: 0.1 }
     );
 
     if (sentinelRef.current) {
@@ -107,13 +114,13 @@ export default function Page() {
   const renderGridItem = () => {
     if (!queryData.tokens) return Array.from({ length: 100 }).map(() => null);
 
-    return queryData.tokens.map((token: Token) => (
+    return tokens.map((token: Token) => (
       <GridItem key={uuidv4()}>
-        <Link href={`/clone/${token.tokenId}`}>
+        <Link href={`/clone/${token.id}`}>
           <div className="content">
             <Image
               src={token.metadata.image}
-              alt={`CloneX#${token.tokenId}`}
+              alt={`CloneX#${token.id}`}
               width={500}
               height={500}
             />

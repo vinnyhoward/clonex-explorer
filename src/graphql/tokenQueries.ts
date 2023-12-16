@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_TOKENS_QUERY = gql`
-  query GetTokens($first: Int!, $after: ID) {
-    tokens(first: $first, after: $after) {
+  query GetTokens($first: Int!, $skip: Int!) {
+    tokens(first: $first, skip: $skip) {
       id
       tokenId
       metadata {

@@ -83,7 +83,7 @@ export const Background: React.FC<LogoProps> = ({
       <path
         fill={color}
         stroke={strokeColor}
-        stroke-width="5"
+        strokeWidth="5"
         d="M2 113V12.299L9.05263 2H270V91.2577L255.111 113H2Z"
       />
     </svg>

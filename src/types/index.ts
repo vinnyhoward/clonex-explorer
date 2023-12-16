@@ -3,6 +3,7 @@ export interface Token {
   id: string;
   metadata: Metadata;
   owner: Owner;
+  tokenId: string;
 }
 
 export interface Metadata {
