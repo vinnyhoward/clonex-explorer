@@ -7,45 +7,64 @@ import { shortenAddress, timeAgo } from "../../utils";
 const TransactionListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   margin: 25px 30px;
   font-family: ${(props) => props.theme.fontFamily.robotoFlex};
   font-weight: 700;
   font-size: ${(props) => props.theme.fontSize.md};
+  color: ${(props) => props.theme.colors.white};
+  y-overflow: scroll;
 
   .transfer-item {
+    border: 1px solid ${(props) => props.theme.colors.slateGrey};
+    border-bottom: none;
+    padding: 20px 30px;
     display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #eee;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .transfer-item:last-child {
-    border-bottom: none;
+  .show-more-wrapper {
+    border: 1px solid ${(props) => props.theme.colors.slateGrey};
+    border-top: none;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    color: ${(props) => props.theme.colors.slateGrey};
+    cursor: pointer;
   }
 
   .transfer-icon {
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
   }
 
   .transfer-icon .icon {
+    align-items: center;
+    justify-content: center;
   }
 
   .transfer-type,
   .transfer-from,
   .transfer-to,
   .transfer-time {
-    margin-left: 10px;
-    color: #333;
   }
 
   .transfer-time {
-    margin-left: auto;
   }
 
-  .transfer-item:hover {
-    background: #f6f6f6;
-    cursor: pointer;
+  .bottom {
+    border-bottom: 1px solid ${(props) => props.theme.colors.slateGrey};
+  }
+
+  .transfer-icon-wrapper {
+    display: flex;
+    flex-direction: row;
   }
 
   @media (max-width: 600px) {
@@ -53,6 +72,7 @@ const TransactionListContainer = styled.div`
       flex-direction: column;
       align-items: start;
     }
+
     .transfer-time {
       margin-left: 0;
       margin-top: 5px;
@@ -65,30 +85,41 @@ interface TraitListProps {
 }
 
 export const TransactionList: React.FC<TraitListProps> = ({ transactions }) => {
+  const lastIndex = transactions.length - 1;
+
   const renderTransactions = () => {
-    return transactions.map((transaction) => {
+    return transactions.map((transaction, index) => {
       const date = timeAgo(Number(transaction.blockTimestamp));
       const to = shortenAddress(transaction.to);
       const from = shortenAddress(transaction.from);
 
+      let extraStyles: string = "";
+      if (index == lastIndex) {
+        extraStyles = "bottom";
+      }
+      console.log(`transfer-item ${extraStyles} and index is ${index}`);
       return (
-        <div key={transaction.id} className="transfer-item">
-          <div className="transfer-icon">
-            <TransferIcon />
+        <div key={transaction.id} className={`transfer-item ${extraStyles}`}>
+          <div className="transfer-icon-wrapper">
+            <div className="transfer-icon">
+              <TransferIcon />
+            </div>
+            <div className="transfer-type">Transfer</div>
           </div>
-          <div className="transfer-type">Transfer</div>
           <div className="transfer-from">{from}</div>
           <div className="transfer-to">{to}</div>
-          <div className="transfer-time">
-           {date}
-          </div>
+          <div className="transfer-time">{date}</div>
         </div>
       );
     });
   };
 
-  console.log("transactions", transactions);
   return (
-    <TransactionListContainer>{renderTransactions()}</TransactionListContainer>
+    <TransactionListContainer>
+      {renderTransactions()}
+      {<div className="show-more-wrapper">
+        <div className="show-more">Show More</div>
+      </div>}
+    </TransactionListContainer>
   );
 };

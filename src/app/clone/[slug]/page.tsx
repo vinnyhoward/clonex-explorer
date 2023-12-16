@@ -40,10 +40,17 @@ const Container = styled.div`
     width: 40%;
     background-color: ${(props) => props.theme.colors.darkerBlue};
     height: 100vh;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     @media (max-width: 1200px) {
       width: 100%;
     }
+  }
+
+  .info-section::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -110,7 +117,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     };
 
     getTraitData();
-  }, [typedData.token.id]);  
+  }, [typedData.token.id]);
 
   return <div>{renderTokenMetaData()}</div>;
 }
