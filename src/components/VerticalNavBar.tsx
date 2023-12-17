@@ -12,6 +12,7 @@ import {
   TwitterIcon,
   TransactionIcon,
   HomeIcon,
+  SearchIcon,
 } from "./Icons";
 
 const NavBarContainer = styled.div`
@@ -71,7 +72,6 @@ const NavBarContainer = styled.div`
     align-items: center;
   }
 `;
-
 const VerticalNavBar = () => {
   const el = useRef(null);
 
@@ -108,6 +108,16 @@ const VerticalNavBar = () => {
                     height={iconSize}
                   />
                 </Link>
+              </div>
+              <div
+                onClick={() => console.log("search")}
+                className="icon-wrapper"
+              >
+                <SearchIcon
+                  color={defaultTheme.colors.white}
+                  width={iconSize}
+                  height={iconSize}
+                />
               </div>
             </div>
           </div>

@@ -16,3 +16,5 @@ export { TypeIcon } from "./TypeIcon";
 export { HomeIcon } from "./HomeIcon";
 export { TransactionIcon } from "./TransactionIcon";
 export { TransferIcon } from "./TransferIcon";
+export { SearchIcon } from "./SearchIcon";
+export { ThinSearchIcon } from "./ThinSearchIcon";

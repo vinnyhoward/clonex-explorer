@@ -48,7 +48,6 @@ export default function Page() {
   const [skipAmount, setSkipAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [tokens, setTokens] = useState<Token[]>([]);
-
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
