@@ -5,6 +5,7 @@ import VerticalNavBar from "@/components/VerticalNavBar";
 import { ApolloProvider } from "@/lib/apolloProvider";
 import ParentLayout from "@/components/ParentLayout";
 import { SearchModal } from "@/components/SearchModal/SearchModal";
+import { SearchProvider } from "../hooks/useSearch";
 
 export const metadata: Metadata = {
   title: "CloneX Explorer",
@@ -23,9 +24,11 @@ export default function RootLayout({
         <ApolloProvider>
           <StyledComponentsRegistry>
             <ThemeWrapper>
-              <SearchModal />
-              <VerticalNavBar />
-              <ParentLayout>{children}</ParentLayout>
+              <SearchProvider>
+                <SearchModal />
+                <VerticalNavBar />
+                <ParentLayout>{children}</ParentLayout>
+              </SearchProvider>
             </ThemeWrapper>
           </StyledComponentsRegistry>
         </ApolloProvider>

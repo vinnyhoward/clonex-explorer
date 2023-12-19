@@ -56,3 +56,15 @@ export const GET_TOKEN_TRANSACTION_HISTORY = gql`
     }
   }
 `;
+
+export const SEARCH_TOKENS_BY_ID_QUERY = gql`
+  query SearchTokensById($tokenId: String!, $first: Int!, $skip: Int!) {
+    tokens(where: { tokenId: $tokenId }, first: $first, skip: $skip) {
+      id
+      tokenId
+      metadata {
+        image
+      }
+    }
+  }
+`;

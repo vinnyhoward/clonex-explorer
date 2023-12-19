@@ -72,6 +72,7 @@ const NavBarContainer = styled.div`
     align-items: center;
   }
 `;
+
 const VerticalNavBar = () => {
   const el = useRef(null);
 

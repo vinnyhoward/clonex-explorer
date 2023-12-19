@@ -1,28 +1,34 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import gsap from "gsap";
+import { useSearch } from "../../hooks/useSearch";
 import { ThinSearchIcon } from "../Icons";
 import { Token } from "../../types";
-import gsap from "gsap";
 
 type SearchModalProps = {};
 
 const SearchModalContainer = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  backdrop-filter: blur(10px);
-  background-color: rgba(34, 35, 44, 0.9);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-  width: 500px;
-  height: 80px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+
+  .outer-modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(10px);
+    background-color: rgba(34, 35, 44, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    width: 500px;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 
   .search-bar {
     background: none;
@@ -94,7 +100,10 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
 
   useEffect(() => {
     if (loading) {
-      searchIconLoadingAnim.current = gsap.timeline({ repeat: -1, yoyo: false });
+      searchIconLoadingAnim.current = gsap.timeline({
+        repeat: -1,
+        yoyo: false,
+      });
       searchIconLoadingAnim.current.to(".thin-search-icon", {
         duration: 0.5,
         rotation: 720,
@@ -123,16 +132,18 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
 
   return (
     <SearchModalContainer>
-      <div ref={el} className="thin-search-icon">
-        <ThinSearchIcon />
+      <div className="outer-modal-container">
+        <div ref={el} className="thin-search-icon">
+          <ThinSearchIcon />
+        </div>
+        <input
+          onChange={onInputChange}
+          className="search-bar"
+          type="text"
+          placeholder="Search by token id..."
+          value={searchInput}
+        />
       </div>
-      <input
-        onChange={onInputChange}
-        className="search-bar"
-        type="text"
-        placeholder="Search by token id..."
-        value={searchInput}
-      />
     </SearchModalContainer>
   );
 };
