@@ -5,6 +5,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import gsap from "gsap";
 import { RTFKTLogo } from "@/components/RTFKTLogo";
+import { useSearch } from "@/hooks/useSearch";
 import { defaultTheme } from "@/styles/defaultTheme";
 import {
   OpenSeaIcon,
@@ -75,6 +76,7 @@ const NavBarContainer = styled.div`
 
 const VerticalNavBar = () => {
   const el = useRef(null);
+  const { setIsModalOpen, isModalOpen } = useSearch();
 
   useLayoutEffect(() => {
     gsap.context(() => {
@@ -111,7 +113,7 @@ const VerticalNavBar = () => {
                 </Link>
               </div>
               <div
-                onClick={() => console.log("search")}
+                onClick={() => setIsModalOpen(!isModalOpen)}
                 className="icon-wrapper"
               >
                 <SearchIcon

@@ -1,10 +1,11 @@
 "use client";
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
+import { useSearch } from "@/hooks/useSearch";
 // import gsap from "gsap";
 
 const ParentLayoutContainer = styled.div`
-    padding: 0px 0px 0px 100px;
+  padding: 0px 0px 0px 100px;
 
   @media (max-width: 700px) {
     padding: 0px 0px 0px 70px;
@@ -13,6 +14,7 @@ const ParentLayoutContainer = styled.div`
 
 const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const el = useRef(null);
+  const { setIsModalOpen } = useSearch();
 
   // useLayoutEffect(() => {
   //   gsap.context(() => {
@@ -23,7 +25,14 @@ const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   //   }, el);
   // }, []);
 
-  return <ParentLayoutContainer ref={el}>{children}</ParentLayoutContainer>;
+  return (
+    <ParentLayoutContainer
+      onClick={() => setIsModalOpen(false)}
+      ref={el}
+    >
+      {children}
+    </ParentLayoutContainer>
+  );
 };
 
 export default ParentLayout;

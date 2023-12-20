@@ -2,15 +2,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import gsap from "gsap";
-import { useSearch } from "../../hooks/useSearch";
+import { useSearch } from "@/hooks/useSearch";
 import { ThinSearchIcon } from "../Icons";
-import { Token } from "../../types";
+import { Token } from "@/types";
 
 type SearchModalProps = {};
-
-const SearchModalContainer = styled.div`
+interface SearchModalContainerProps {
+  isModalOpen: boolean;
+}
+const SearchModalContainer = styled.div<SearchModalContainerProps>`
   height: 100%;
   width: 100%;
+  display: ${(props) => (props.isModalOpen ? "flex" : "none")};
+  z-index: 1;
 
   .outer-modal-container {
     position: fixed;
@@ -28,6 +32,7 @@ const SearchModalContainer = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    z-index: 10;
   }
 
   .search-bar {
@@ -40,21 +45,29 @@ const SearchModalContainer = styled.div`
     font-size: ${(props) => props.theme.fontSize.xxl};
     line-height: 40px;
     margin-left: 10px;
+    z-index: 1;
   }
 
   .search-bar::placeholder {
     color: ${(props) => props.theme.colors.white};
     font-size: ${(props) => props.theme.fontSize.xxl};
     line-height: 40px;
+    z-index: 1;
   }
 `;
 
 export const SearchModal: React.FC<SearchModalProps> = () => {
   const el = useRef<HTMLDivElement>(null);
   const searchIconLoadingAnim = useRef<GSAPTimeline>(null);
-  const [searchInput, setSearchInput] = useState<string>("");
+  const {
+    searchInput,
+    setSearchInput,
+    searchResults,
+    setSearchResults,
+    isModalOpen,
+    setIsModalOpen,
+  } = useSearch();
   const [lastSearchInput, setLastSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Token[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
@@ -131,7 +144,9 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
   }, [loading]);
 
   return (
-    <SearchModalContainer>
+    <SearchModalContainer
+      isModalOpen={isModalOpen}
+    >
       <div className="outer-modal-container">
         <div ref={el} className="thin-search-icon">
           <ThinSearchIcon />
