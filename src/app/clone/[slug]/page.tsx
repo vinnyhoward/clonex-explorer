@@ -67,7 +67,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [transactions, setTransactions] = useState<Transfer[]>([]);
   const [skipAmount, setSkipAmount] = useState<number>(0);
   const [canLoadMore, setCanLoadMore] = useState<boolean>(true);
-
   const { data, fetchMore } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug, first: QUERY_SIZE, skip: skipAmount },
   });
