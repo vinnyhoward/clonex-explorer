@@ -5,9 +5,10 @@ import Image from "next/image";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { CloneDataList, Token } from "../types";
-import { GET_TOKENS_QUERY } from "../graphql/tokenQueries";
+import { CloneDataList, Token } from "@/types";
+import { GET_TOKENS_QUERY } from "@/graphql/tokenQueries";
 import { CloneXLogo } from "@/components/CloneXLogo";
+import { useCloneData } from "@/hooks/useCloneData";
 
 const Grid = styled.div`
   display: grid;
@@ -47,7 +48,7 @@ export default function Page() {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [skipAmount, setSkipAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const [tokens, setTokens] = useState<Token[]>([]);
+  const { cloneData, setCloneData } = useCloneData();
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
@@ -68,7 +69,7 @@ export default function Page() {
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           if (!fetchMoreResult) return prev;
 
-          setTokens((prevTokens) => {
+          setCloneData((prevTokens) => {
             if (!prevTokens) return fetchMoreResult.tokens;
             return [...prevTokens, ...fetchMoreResult.tokens];
           });
@@ -113,7 +114,7 @@ export default function Page() {
   const renderGridItem = () => {
     if (!queryData.tokens) return Array.from({ length: 100 }).map(() => null);
 
-    return tokens.map((token: Token) => (
+    return cloneData.map((token: Token) => (
       <GridItem key={uuidv4()}>
         <Link href={`/clone/${token.id}`}>
           <div className="content">

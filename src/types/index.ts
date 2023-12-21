@@ -79,3 +79,9 @@ export enum Section {
   TraitList = "TraitList",
   TransactionList = "TransactionList",
 }
+
+export interface CloneDetails {
+  id: string;
+  transactions: Transfer[];
+  traits: CloneTraitsList[];
+}

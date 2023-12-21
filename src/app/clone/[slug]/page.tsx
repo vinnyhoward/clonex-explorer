@@ -89,8 +89,6 @@ export default function Page({ params }: { params: { slug: string } }) {
           setCanLoadMore(false);
         }
 
-        console.log("fetch more: ", fetchMoreResult.transfers[0].tokenId);
-        console.log("prev: ", transactions[0]?.tokenId);
         if (fetchMoreResult.transfers[0].tokenId === transactions[0]?.tokenId) {
           return setCanLoadMore(false);
         }

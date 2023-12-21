@@ -94,7 +94,10 @@ const VerticalNavBar = () => {
         <div className="navbar-content">
           <div className="top-section">
             <div className="nav-container">
-              <div className="icon-wrapper">
+              <div
+                className="icon-wrapper"
+                onClick={() => setIsModalOpen(false)}
+              >
                 <Link href="/">
                   <HomeIcon
                     color={defaultTheme.colors.white}
@@ -103,7 +106,10 @@ const VerticalNavBar = () => {
                   />
                 </Link>
               </div>
-              <div className="icon-wrapper">
+              <div
+                className="icon-wrapper"
+                onClick={() => setIsModalOpen(false)}
+              >
                 <Link href="/activity">
                   <TransactionIcon
                     color={defaultTheme.colors.white}
@@ -113,8 +119,8 @@ const VerticalNavBar = () => {
                 </Link>
               </div>
               <div
-                onClick={() => setIsModalOpen(!isModalOpen)}
                 className="icon-wrapper"
+                onClick={() => setIsModalOpen(!isModalOpen)}
               >
                 <SearchIcon
                   color={defaultTheme.colors.white}

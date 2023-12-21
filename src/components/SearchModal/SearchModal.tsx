@@ -8,12 +8,12 @@ import { Token } from "@/types";
 
 type SearchModalProps = {};
 interface SearchModalContainerProps {
-  isModalOpen: boolean;
+  $isModalOpen: boolean;
 }
 const SearchModalContainer = styled.div<SearchModalContainerProps>`
   height: 100%;
   width: 100%;
-  display: ${(props) => (props.isModalOpen ? "flex" : "none")};
+  display: ${(props) => (props.$isModalOpen ? "flex" : "none")};
   z-index: 1;
 
   .outer-modal-container {
@@ -143,10 +143,25 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
     }
   }, [loading]);
 
+  useEffect(() => {
+    const keyDownHandler = (
+      event: KeyboardEvent | React.KeyboardEvent<HTMLDivElement>
+    ) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsModalOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   return (
-    <SearchModalContainer
-      isModalOpen={isModalOpen}
-    >
+    <SearchModalContainer $isModalOpen={isModalOpen}>
       <div className="outer-modal-container">
         <div ref={el} className="thin-search-icon">
           <ThinSearchIcon />
