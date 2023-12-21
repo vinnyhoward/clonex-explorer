@@ -1,5 +1,4 @@
 "use client";
-
 import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import styled from "styled-components";

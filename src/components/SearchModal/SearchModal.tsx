@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import gsap from "gsap";
 import { useSearch } from "@/hooks/useSearch";
+import { Loader } from "../Loader/Loader";
 import { ThinSearchIcon } from "../Icons";
-import { Token } from "@/types";
 
 type SearchModalProps = {};
 interface SearchModalContainerProps {
@@ -57,16 +56,8 @@ const SearchModalContainer = styled.div<SearchModalContainerProps>`
 `;
 
 export const SearchModal: React.FC<SearchModalProps> = () => {
-  const el = useRef<HTMLDivElement>(null);
-  const searchIconLoadingAnim = useRef<GSAPTimeline>(null);
-  const {
-    searchInput,
-    setSearchInput,
-    searchResults,
-    setSearchResults,
-    isModalOpen,
-    setIsModalOpen,
-  } = useSearch();
+  const { searchInput, setSearchInput, isModalOpen, setIsModalOpen } =
+    useSearch();
   const [lastSearchInput, setLastSearchInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -89,9 +80,7 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (!searchInput) {
-        setLoading(false);
-        setSearchResults([]);
-        return;
+        return setLoading(false);
       }
       setLastSearchInput(searchInput);
       setLoading(true);
@@ -110,38 +99,6 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
       fetchSearchResults();
     }
   }, [isTyping]);
-
-  useEffect(() => {
-    if (loading) {
-      searchIconLoadingAnim.current = gsap.timeline({
-        repeat: -1,
-        yoyo: false,
-      });
-      searchIconLoadingAnim.current.to(".thin-search-icon", {
-        duration: 0.5,
-        rotation: 720,
-        ease: "linear",
-      });
-
-      searchIconLoadingAnim.current.to(".thin-search-icon", {
-        duration: 0.25,
-        y: -1.5,
-        ease: "bounce.out",
-      });
-
-      searchIconLoadingAnim.current.to(".thin-search-icon", {
-        duration: 0.25,
-        y: 0,
-        ease: "bounce.in",
-      });
-    } else {
-      if (searchIconLoadingAnim.current) {
-        searchIconLoadingAnim.current.pause();
-        searchIconLoadingAnim.current.seek(0);
-        searchIconLoadingAnim.current.clear();
-      }
-    }
-  }, [loading]);
 
   useEffect(() => {
     const keyDownHandler = (
@@ -163,8 +120,8 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
   return (
     <SearchModalContainer $isModalOpen={isModalOpen}>
       <div className="outer-modal-container">
-        <div ref={el} className="thin-search-icon">
-          <ThinSearchIcon />
+        <div className="thin-search-icon">
+          {loading ? <Loader /> : <ThinSearchIcon />}
         </div>
         <input
           onChange={onInputChange}

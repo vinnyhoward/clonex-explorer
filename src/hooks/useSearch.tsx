@@ -6,8 +6,6 @@ type SearchContextType = {
   setIsModalOpen: (isOpen: boolean) => void;
   searchInput: string;
   setSearchInput: (input: string) => void;
-  searchResults: any[];
-  setSearchResults: (results: any[]) => void;
 };
 
 const defaultState = {
@@ -15,8 +13,6 @@ const defaultState = {
   setIsModalOpen: () => {},
   searchInput: "",
   setSearchInput: () => {},
-  searchResults: [],
-  setSearchResults: () => {},
 };
 
 export const SearchContext = createContext<SearchContextType>(defaultState);
@@ -24,17 +20,19 @@ export const SearchContext = createContext<SearchContextType>(defaultState);
 export const SearchProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+
+  const setIsModalOpen = (isOpen: boolean) => {
+    setSearchInput("");
+    setModalOpen(isOpen);
+  }
 
   const value = {
     isModalOpen,
     setIsModalOpen,
     searchInput,
     setSearchInput,
-    searchResults,
-    setSearchResults,
   };
 
   return (
