@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSearch } from "@/hooks/useSearch";
+import { useModal } from "@/hooks/useModal";
 import { Loader } from "../Loader/Loader";
 import { ThinSearchIcon } from "../Icons";
 
@@ -56,14 +57,14 @@ const SearchModalContainer = styled.div<SearchModalContainerProps>`
 `;
 
 export const SearchModal: React.FC<SearchModalProps> = () => {
-  const { searchInput, setSearchInput, isModalOpen, setIsModalOpen } =
-    useSearch();
-  const [lastSearchInput, setLastSearchInput] = useState<string>("");
+  const { searchInput, setSearchInput } = useSearch();
+  const { isModalOpen, setIsModalOpen } = useModal();
   const [loading, setLoading] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.replace(/\D/g, "");
+
     setSearchInput(inputValue);
     setIsTyping(true);
   };
@@ -74,29 +75,6 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
         setIsTyping(false);
       }, 500);
       return () => clearTimeout(timer);
-    }
-  }, [isTyping]);
-
-  useEffect(() => {
-    const fetchSearchResults = async () => {
-      if (!searchInput) {
-        return setLoading(false);
-      }
-      setLastSearchInput(searchInput);
-      setLoading(true);
-      try {
-        console.log("fetching....", searchInput);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    const searchLowerCase = searchInput.toLowerCase();
-    const lastSearchLowerCase = lastSearchInput.toLowerCase();
-    if (isTyping === false && searchLowerCase !== lastSearchLowerCase) {
-      fetchSearchResults();
     }
   }, [isTyping]);
 

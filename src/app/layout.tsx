@@ -6,6 +6,7 @@ import { ApolloProvider } from "@/lib/apolloProvider";
 import ParentLayout from "@/components/ParentLayout";
 import { SearchModal } from "@/components/SearchModal/SearchModal";
 import { SearchProvider } from "@/hooks/useSearch";
+import { ModalProvider } from "@/hooks/useModal";
 import { CloneProvider } from "@/hooks/useCloneData";
 
 export const metadata: Metadata = {
@@ -25,13 +26,15 @@ export default function RootLayout({
         <ApolloProvider>
           <StyledComponentsRegistry>
             <ThemeWrapper>
-              <CloneProvider>
+              <ModalProvider>
                 <SearchProvider>
-                  <SearchModal />
-                  <VerticalNavBar />
-                  <ParentLayout>{children}</ParentLayout>
+                  <CloneProvider>
+                    <SearchModal />
+                    <VerticalNavBar />
+                    <ParentLayout>{children}</ParentLayout>
+                  </CloneProvider>
                 </SearchProvider>
-              </CloneProvider>
+              </ModalProvider>
             </ThemeWrapper>
           </StyledComponentsRegistry>
         </ApolloProvider>

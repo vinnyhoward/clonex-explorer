@@ -1,7 +1,7 @@
 "use client";
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
-import { useSearch } from "@/hooks/useSearch";
+import { useModal } from "@/hooks/useModal";
 // import gsap from "gsap";
 
 const ParentLayoutContainer = styled.div`
@@ -14,7 +14,7 @@ const ParentLayoutContainer = styled.div`
 
 const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const el = useRef(null);
-  const { setIsModalOpen } = useSearch();
+  const { setIsModalOpen } = useModal();
 
   // useLayoutEffect(() => {
   //   gsap.context(() => {

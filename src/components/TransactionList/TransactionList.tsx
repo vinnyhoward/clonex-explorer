@@ -132,7 +132,7 @@ export const TransactionList: React.FC<TraitListProps> = ({
       );
     });
   };
-  console.log("transactions", transactions);
+
   return (
     <TransactionListContainer>
       <div className="table-header">

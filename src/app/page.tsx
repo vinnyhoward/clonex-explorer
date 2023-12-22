@@ -43,12 +43,13 @@ const SentinelDiv = styled.div`
 
 export default function Page() {
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const { cloneData, loadMoreTokens, loading } = useCloneData();
+  const { cloneData, cloneDetails, loadMoreTokens, loading } = useCloneData();
+  const doesCloneDetailsExist = Object.keys(cloneDetails).length > 0;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading) {
+        if (entries[0].isIntersecting && !loading && !doesCloneDetailsExist) {
           loadMoreTokens();
         }
       },
@@ -64,10 +65,28 @@ export default function Page() {
         observer.unobserve(sentinelRef.current);
       }
     };
-  }, [loading, loadMoreTokens]);
+  }, [loading, loadMoreTokens, doesCloneDetailsExist]);
 
   const renderGridItem = () => {
     if (!cloneData) return Array.from({ length: 100 }).map(() => null);
+
+    if (doesCloneDetailsExist) {
+      const { id, metadata } = cloneDetails;
+      return (
+        <GridItem key={uuidv4()}>
+          <Link href={`/clone/${id}`}>
+            <div className="content">
+              <Image
+                src={metadata.image}
+                alt={`CloneX#${id}`}
+                width={500}
+                height={500}
+              />
+            </div>
+          </Link>
+        </GridItem>
+      );
+    }
 
     return cloneData.map((token: Token) => (
       <GridItem key={uuidv4()}>
