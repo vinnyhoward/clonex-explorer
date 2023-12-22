@@ -31,6 +31,7 @@ export const defaultTheme = {
     slateGrey: "#404451",
     charcoal: "#22232C",
     periwinkle: "#6A7086",
+    blueCharcoal: "#191920",
   },
   gradient: {
     darkBlueGradient: `linear-gradient(135deg, #2F3039, #393A4E)`,

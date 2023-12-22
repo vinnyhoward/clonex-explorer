@@ -37,7 +37,13 @@ export const GET_TOKEN_DATA_QUERY = gql`
       }
     }
 
-    transfers(first: $first, skip: $skip, where: { tokenId: $id }) {
+    transfers(
+      first: $first
+      skip: $skip
+      orderBy: blockTimestamp
+      orderDirection: desc
+      where: { tokenId: $id }
+    ) {
       blockNumber
       blockTimestamp
       from
@@ -77,6 +83,26 @@ export const SEARCH_TOKENS_BY_ID_QUERY = gql`
       metadata {
         image
       }
+    }
+  }
+`;
+
+export const OVERALL_ACTIVITY_QUERY = gql`
+  query OverallActivity($first: Int!, $skip: Int!) {
+    transfers(
+      first: $first
+      skip: $skip
+      orderBy: blockTimestamp
+      orderDirection: desc
+    ) {
+      blockNumber
+      blockTimestamp
+      from
+      gasPrice
+      id
+      to
+      tokenId
+      transactionHash
     }
   }
 `;
