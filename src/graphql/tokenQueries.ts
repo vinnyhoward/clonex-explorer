@@ -26,7 +26,7 @@ export const GET_SINGLE_TOKEN_QUERY = gql`
 
 export const GET_TOKEN_DATA_QUERY = gql`
   query GetTokenData($id: String!, $first: Int!, $skip: Int!) {
-    token(id: $id) {
+    token(id: $id, first: $first, skip: $skip) {
       id
       metadata {
         id

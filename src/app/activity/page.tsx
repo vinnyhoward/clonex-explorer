@@ -13,14 +13,25 @@ import { TransferIcon } from "../../components/Icons";
 const ActivityContainer = styled.div`
   height: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   background-color: ${(props) => props.theme.colors.blueCharcoal};
+  width: 100%;
+  margin-bottom: 100px;
+
+  h1 {
+    margin: 50px 0px 20px 0px;
+    font-family: ${(props) => props.theme.fontFamily.robotoFlex};
+    font-weight: 700;
+    font-size: ${(props) => props.theme.fontSize.xxxl};
+    color: ${(props) => props.theme.colors.white};
+  }
 
   table {
     width: 100%;
     border-collapse: collapse;
     max-width: 92%;
-    margin: 50px 0px;
   }
 
   thead {
@@ -50,8 +61,15 @@ const ActivityContainer = styled.div`
     padding: 15px 20px;
   }
 
+  td:first-child {
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+  }
+
   .top {
     border-top: 1px solid ${(props) => props.theme.colors.slateGrey};
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
 
   .image-name {
@@ -96,6 +114,22 @@ const ActivityContainer = styled.div`
   .table-r-margin {
     margin-right: 75px;
   }
+
+  .show-more-wrapper {
+    background-color: ${(props) => props.theme.colors.charcoal};
+    border: 1px solid ${(props) => props.theme.colors.slateGrey};
+    border-top: none;
+    padding: 15px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    color: ${(props) => props.theme.colors.slateGrey};
+    cursor: pointer;
+    width: 92%;
+  }
 `;
 
 const QUERY_SIZE = 50;
@@ -103,14 +137,14 @@ export default function Page() {
   const [skipAmount, setSkipAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<Transfer[]>([]);
-  const { data, fetchMore } = useSuspenseQuery(OVERALL_ACTIVITY_QUERY, {
+  const { fetchMore } = useSuspenseQuery(OVERALL_ACTIVITY_QUERY, {
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
 
   const loadMoreTransactions = useCallback(async () => {
     if (loading) return;
     setLoading(true);
-    const nextScrollPosition = window.scrollY;
+    // const nextScrollPosition = window.scrollY;
 
     try {
       const currentSkipAmount = skipAmount;
@@ -124,17 +158,17 @@ export default function Page() {
 
           console.log("fetch more result:", fetchMoreResult);
           setTransactions((prevTokens) => {
+            console.log('1');
             if (!prevTokens) return fetchMoreResult.transfers;
+            console.log('2');
             return [...prevTokens, ...fetchMoreResult.transfers];
           });
-
-          const newSkipAmount = currentSkipAmount + QUERY_SIZE;
-          setSkipAmount(newSkipAmount);
         },
       });
-
       if (response.networkStatus === 7) {
-        window.scrollTo(0, nextScrollPosition - 100);
+        const newSkipAmount = currentSkipAmount + QUERY_SIZE;
+        setSkipAmount(newSkipAmount);
+        // window.scrollTo(0, nextScrollPosition - 100);
       }
     } catch (error) {
       console.error("Error fetching more tokens:", error);
@@ -194,8 +228,12 @@ export default function Page() {
       );
     });
   };
+
+  console.log("fetch more result:", transactions);
+  console.log("skip amount:", skipAmount);
   return (
     <ActivityContainer>
+      <h1>Transaction Activity</h1>
       <table>
         <thead>
           <tr>
@@ -210,6 +248,12 @@ export default function Page() {
         </thead>
         <tbody>{renderTransactionsActivity()}</tbody>
       </table>
+
+      <div className="show-more-wrapper">
+        <div onClick={loadMoreTransactions} className="show-more">
+          Show More
+        </div>
+      </div>
     </ActivityContainer>
   );
 }
