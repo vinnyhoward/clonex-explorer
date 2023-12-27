@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import styled from "styled-components";
 import { useSearch } from "@/hooks/useSearch";
 import { useModal } from "@/hooks/useModal";
@@ -61,12 +62,21 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
   const { isModalOpen, setIsModalOpen } = useModal();
   const [loading, setLoading] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const router = useRouter();
 
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value.replace(/\D/g, "");
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replace(/\D/g, "");
 
-    setSearchInput(inputValue);
+    setSearchInput(value);
     setIsTyping(true);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setIsModalOpen(false);
+      router.push(`/clone/${searchInput}`);
+    }
   };
 
   useEffect(() => {
@@ -74,7 +84,9 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
       const timer = setTimeout(() => {
         setIsTyping(false);
       }, 500);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [isTyping]);
 
@@ -84,6 +96,7 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
     ) => {
       if (event.key === "Escape") {
         event.preventDefault();
+        setSearchInput("");
         setIsModalOpen(false);
       }
     };
@@ -103,6 +116,7 @@ export const SearchModal: React.FC<SearchModalProps> = () => {
         </div>
         <input
           onChange={onInputChange}
+          onKeyDown={handleKeyDown}
           className="search-bar"
           type="text"
           placeholder="Search by token id..."

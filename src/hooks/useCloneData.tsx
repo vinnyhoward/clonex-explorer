@@ -1,27 +1,14 @@
-// useCloneData.tsx
 "use client";
-import React, {
-  useState,
-  createContext,
-  useContext,
-  useCallback,
-  useEffect,
-} from "react";
+import React, { useState, createContext, useContext, useCallback } from "react";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import {
-  GET_TOKENS_QUERY,
-  GET_SINGLE_TOKEN_QUERY,
-} from "@/graphql/tokenQueries";
+import { GET_TOKENS_QUERY } from "@/graphql/tokenQueries";
 import { Token } from "@/types";
-import { useSearch } from "@/hooks/useSearch";
 
 const QUERY_SIZE = 50;
 
 type UseCloneDataContextType = {
   cloneData: Token[];
   setCloneData: (data: Token[]) => void;
-  cloneDetails: Token;
-  setCloneDetails: (data: Token) => void;
   loadMoreTokens: () => Promise<void>;
   loading: boolean;
 };
@@ -29,8 +16,6 @@ type UseCloneDataContextType = {
 const defaultState = {
   cloneData: [],
   setCloneData: () => {},
-  cloneDetails: {} as Token,
-  setCloneDetails: () => {},
   loadMoreTokens: async () => {},
   loading: false,
 };
@@ -42,23 +27,14 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [cloneData, setCloneData] = useState<Token[]>([]);
-  const [cloneDetails, setCloneDetails] = useState<Token>(
-    {} as Token
-  );
   const [loading, setLoading] = useState<boolean>(false);
   const [skipAmount, setSkipAmount] = useState<number>(0);
-
-  const { searchInput } = useSearch();
   const { data, fetchMore } = useSuspenseQuery(GET_TOKENS_QUERY, {
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
 
-  const { data: cloneDetailsData, fetchMore: fetchMoreDetails } =
-    useSuspenseQuery(GET_SINGLE_TOKEN_QUERY, {
-      variables: { id: searchInput },
-    });
-
   const loadMoreTokens = useCallback(async () => {
+    // @ts-ignore
     if (loading || !data?.tokens) return;
     setLoading(true);
     const nextScrollPosition = window.scrollY;
@@ -93,41 +69,9 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  useEffect(() => {
-    const fetchCloneDetails = async () => {
-      if (!searchInput) {
-        return setLoading(false);
-      }
-
-      setLoading(true);
-      try {
-        const response = await fetchMoreDetails({
-          variables: { id: searchInput },
-        });
-
-        if (response && response.data) {
-          setCloneDetails(response.data.token);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (searchInput) {
-      fetchCloneDetails();
-    } else {
-      setCloneDetails({} as Token);
-      loadMoreTokens();
-    }
-  }, [searchInput, fetchMoreDetails]);
-
   const value = {
     cloneData,
     setCloneData,
-    cloneDetails,
-    setCloneDetails,
     loadMoreTokens,
     loading,
   };
