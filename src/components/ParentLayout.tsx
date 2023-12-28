@@ -2,7 +2,7 @@
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
 import { useModal } from "@/hooks/useModal";
-// import gsap from "gsap";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const ParentLayoutContainer = styled.div`
   padding: 0px 0px 0px 100px;
@@ -16,20 +16,8 @@ const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const el = useRef(null);
   const { setIsModalOpen } = useModal();
 
-  // useLayoutEffect(() => {
-  //   gsap.context(() => {
-  //     gsap.to(el.current, {
-  //       keyframes: [{ paddingLeft: 100, duration: 0.25, ease: "sine.out" }],
-  //       ease: "expo.inOut",
-  //     });
-  //   }, el);
-  // }, []);
-
   return (
-    <ParentLayoutContainer
-      onClick={() => setIsModalOpen(false)}
-      ref={el}
-    >
+    <ParentLayoutContainer onClick={() => setIsModalOpen(false)} ref={el}>
       {children}
     </ParentLayoutContainer>
   );

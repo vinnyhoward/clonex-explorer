@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
@@ -65,6 +65,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [section, setSection] = useState(Section.TraitList);
   const [traits, setTraits] = useState<CloneTraitsList[]>([]);
   const [transactions, setTransactions] = useState<Transfer[]>([]);
+  const [loadingTransactions, setLoadingTransactions] = useState<boolean>(false);
+  const [loadingTraits, setLoadingTraits] = useState<boolean>(true);
   const [skipAmount, setSkipAmount] = useState<number>(0);
   const [canLoadMore, setCanLoadMore] = useState<boolean>(true);
   const { data, fetchMore } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
@@ -74,6 +76,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const loadMoreTokens = async () => {
     if (!typedData.token) return;
+    // setLoadingTransactions(true);
     const currentSkipAmount = skipAmount;
     const response = await fetchMore({
       variables: {
@@ -102,28 +105,26 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (response.networkStatus === 7) {
       setSkipAmount(currentSkipAmount + QUERY_SIZE);
     }
+    setLoadingTransactions(false);
   };
 
-  const renderTokenMetaData = () => {
-    if (!typedData || !typedData.token) {
-      return null;
+  const renderSection = useCallback(() => {
+    switch (section) {
+      case Section.TraitList:
+        return <TraitList loading={loadingTraits} traits={traits} />;
+      default:
+        return (
+          <TransactionList
+            loadMoreTokens={loadMoreTokens}
+            transactions={transactions}
+            canLoadMore={canLoadMore}
+            loading={loadingTransactions}
+          />
+        );
     }
-
-    const renderSection = () => {
-      switch (section) {
-        case Section.TraitList:
-          return <TraitList traits={traits} />;
-        default:
-          return (
-            <TransactionList
-              loadMoreTokens={loadMoreTokens}
-              transactions={transactions}
-              canLoadMore={canLoadMore}
-            />
-          );
-      }
-    };
-
+  }, [section, loadingTraits, loadingTransactions]);
+  
+  const renderTokenMetaData = useCallback(() => {
     return (
       <Container>
         <div className="container">
@@ -149,12 +150,13 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
       </Container>
     );
-  };
+  }, [loadingTraits, loadingTransactions, section, traits, transactions]);
 
   useEffect(() => {
     const getTraitData = async () => {
       try {
         if (!typedData.token) return;
+        setLoadingTraits(true);
         const fetchedData = await fetch(
           `${
             process.env.NEXT_PUBLIC_API_URL
@@ -165,6 +167,8 @@ export default function Page({ params }: { params: { slug: string } }) {
         setTraits(traits);
       } catch (error) {
         console.error("Error fetching trait data:", error);
+      } finally {
+        setLoadingTraits(false);
       }
     };
 

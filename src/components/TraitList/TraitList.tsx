@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { CloneTraitsList } from "../../types";
+import { CloneTraitsList } from "@/types";
+import Skeleton from "react-loading-skeleton";
 import {
   AccessoriesIcon,
   BackIcon,
@@ -63,6 +64,10 @@ const TraitListContainer = styled.div`
   .trait-header {
     text-transform: uppercase;
   }
+
+  .skeleton {
+    width: 100%;
+  }
 `;
 
 enum TraitType {
@@ -82,9 +87,10 @@ enum TraitType {
 
 interface TraitListProps {
   traits: CloneTraitsList[];
+  loading: boolean;
 }
 
-export const TraitList: React.FC<TraitListProps> = ({ traits }) => {
+export const TraitList: React.FC<TraitListProps> = ({ traits, loading }) => {
   const getCloneIcon = (trait: string) => {
     switch (trait) {
       case TraitType.Type:
@@ -158,14 +164,30 @@ export const TraitList: React.FC<TraitListProps> = ({ traits }) => {
       if (index === 0) {
         extraStyles = "top";
       }
-
       return (
         <div className={`row ${extraStyles}`} key={index}>
-          <div className="trait-sub-header">
-            <div className="icon-wrapper">{getCloneIcon(trait.trait_type)}</div>
-            <div className="trait-header">{getTraitName(trait.trait_type)}</div>
-          </div>
-          <div className="trait-name">{trait.value}</div>
+          {loading ? (
+            <Skeleton
+              width="100%"
+              height={20}
+              baseColor="#DDDDDD"
+              highlightColor="#9B9B9B"
+              duration={1}
+              containerClassName="skeleton"
+            />
+          ) : (
+            <>
+              <div className="trait-sub-header">
+                <div className="icon-wrapper">
+                  {getCloneIcon(trait.trait_type)}
+                </div>
+                <div className="trait-header">
+                  {getTraitName(trait.trait_type)}
+                </div>
+              </div>
+              <div className="trait-name">{trait.value}</div>
+            </>
+          )}
         </div>
       );
     });

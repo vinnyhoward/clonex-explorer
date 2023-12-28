@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
+import Skeleton from "react-loading-skeleton";
 import { TransferIcon } from "../Icons";
-import { Transfer } from "../../types";
-import { shortenAddress, timeAgo } from "../../utils";
+import { Transfer } from "@/types";
+import { shortenAddress, timeAgo } from "@/utils";
 
 const TransactionListContainer = styled.div`
   display: flex;
@@ -97,16 +98,18 @@ interface TraitListProps {
   transactions: Transfer[];
   loadMoreTokens: () => void;
   canLoadMore: boolean;
+  loading: boolean;
 }
 
 export const TransactionList: React.FC<TraitListProps> = ({
   transactions,
   loadMoreTokens,
   canLoadMore,
+  loading,
 }) => {
   const lastIndex = transactions.length - 1;
 
-  const renderTransactions = () => {
+  const renderTransactions = useCallback(() => {
     return transactions.map((transaction, index) => {
       const date = timeAgo(Number(transaction.blockTimestamp));
       const to = shortenAddress(transaction.to);
@@ -120,19 +123,63 @@ export const TransactionList: React.FC<TraitListProps> = ({
       return (
         <div key={uuidv4()} className={`transfer-item ${extraStyles}`}>
           <div className="transfer-icon-wrapper">
-            <div className="transfer-icon">
-              <TransferIcon />
-            </div>
-            <div className="transfer-type">Transfer</div>
+            {loading ? (
+              <Skeleton
+                width={90}
+                baseColor="#DDDDDD"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            ) : (
+              <>
+                <div className="transfer-icon">
+                  <TransferIcon />
+                </div>
+                <div className="transfer-type">Transfer</div>
+              </>
+            )}
           </div>
-          <div className="transfer-from">{from}</div>
-          <div className="transfer-to">{to}</div>
-          <div className="transfer-time">{date}</div>
+          <div className="transfer-from">
+            {loading ? (
+              <Skeleton
+                width={90}
+                baseColor="#DDDDDD"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            ) : (
+              from
+            )}
+          </div>
+          <div className="transfer-to">
+            {loading ? (
+              <Skeleton
+                width={90}
+                baseColor="#DDDDDD"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            ) : (
+              to
+            )}
+          </div>
+          <div className="transfer-time">
+            {loading ? (
+              <Skeleton
+                width={90}
+                baseColor="#DDDDDD"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            ) : (
+              date
+            )}
+          </div>
         </div>
       );
     });
-  };
-
+  }, [transactions, loading, lastIndex]);
+  console.log('trans loading:', loading);
   return (
     <TransactionListContainer>
       <div className="table-header">
