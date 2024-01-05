@@ -7,9 +7,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 const ParentLayoutContainer = styled.div`
   padding: 0px 0px 0px 100px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 1000px) {
     padding: 0px 0px 0px 70px;
   }
+
+  @media (max-width: 600px) {
+    padding: 0px 0px 0px 50px;
+    }
 `;
 
 const ParentLayout: React.FC<{ children: ReactNode }> = ({ children }) => {

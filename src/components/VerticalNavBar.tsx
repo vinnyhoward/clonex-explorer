@@ -26,9 +26,13 @@ const NavBarContainer = styled.div`
     z-index: 1;
     padding: 50px 12px;
 
-    @media (max-width: 700px) {
+    @media (max-width: 1000px) {
       width: 70px;
       padding: 50px 0px;
+    }
+
+    @media (max-width: 600px) {
+      width: 50px;
     }
   }
 
@@ -48,6 +52,10 @@ const NavBarContainer = styled.div`
     align-items: center;
     transform: rotate(-90deg);
     margin-bottom: 26px;
+
+    @media (max-width: 600px) {
+      margin-left: 15px;
+    }
   }
 
   .social-container {

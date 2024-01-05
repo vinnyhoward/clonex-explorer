@@ -18,3 +18,4 @@ export { TransactionIcon } from "./TransactionIcon";
 export { TransferIcon } from "./TransferIcon";
 export { SearchIcon } from "./SearchIcon";
 export { ThinSearchIcon } from "./ThinSearchIcon";
+export { HamburgerIcon } from "./HamburgerIcon";

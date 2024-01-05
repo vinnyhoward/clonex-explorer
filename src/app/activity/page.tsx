@@ -158,9 +158,7 @@ export default function Page() {
 
           console.log("fetch more result:", fetchMoreResult);
           setTransactions((prevTokens) => {
-            console.log('1');
             if (!prevTokens) return fetchMoreResult.transfers;
-            console.log('2');
             return [...prevTokens, ...fetchMoreResult.transfers];
           });
         },

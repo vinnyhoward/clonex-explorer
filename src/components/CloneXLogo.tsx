@@ -13,6 +13,12 @@ const CloneXLogoContainer = styled.div`
     right: 0;
     margin: 40px;
     z-index: 2;
+
+    @media (max-width: 600px) {
+      margin: 0;
+      transform: translate(-30%, -10%);
+      margin: 20px;
+    }
   }
 
   .clone-logo-wrapper {
@@ -29,8 +35,12 @@ const CloneXLogoContainer = styled.div`
     width: 150px;
     height: 70px;
     z-index: 1;
-    background-color: red;
+    background-color: transparent;
     margin: 50px;
+
+    @media (max-width: 600px) {
+      display: none;
+    }
   }
 
   .background-wrapper {
@@ -47,7 +57,7 @@ export const CloneXLogo: React.FC<CloneXLogoProps> = () => {
         <div className="clone-logo-wrapper">
           <Image src={CloneX} alt="CloneX Logo" width={160} height={160} />
         </div>
-          <Background />
+        <Background />
       </div>
       <div className="sentinel-shadow" />
     </CloneXLogoContainer>
