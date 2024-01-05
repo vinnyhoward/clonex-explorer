@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Transfer } from "@/types";
 import { shortenAddress, timeAgo } from "../../utils";
 import { TransferIcon } from "../../components/Icons";
+import { useViewportSize } from "@/hooks/useViewportSize";
 
 const ActivityContainer = styled.div`
   height: 100%;
@@ -26,6 +27,11 @@ const ActivityContainer = styled.div`
     font-weight: 700;
     font-size: ${(props) => props.theme.fontSize.xxxl};
     color: ${(props) => props.theme.colors.white};
+
+    @media (max-width: 400px) {
+      font-size: ${(props) => props.theme.fontSize.xxl};
+      margin: 25px 0px 10px 0px;
+    }
   }
 
   table {
@@ -52,6 +58,10 @@ const ActivityContainer = styled.div`
     color: ${(props) => props.theme.colors.periwinkle};
     font-family: ${(props) => props.theme.fontFamily.robotoFlex};
     font-weight: 500;
+
+    @media (max-width: 400px) {
+      padding: 15px 10px;
+    }
   }
 
   td {
@@ -59,6 +69,10 @@ const ActivityContainer = styled.div`
     background-color: ${(props) => props.theme.colors.charcoal};
     border-bottom: 1px solid ${(props) => props.theme.colors.slateGrey};
     padding: 15px 20px;
+
+    @media (max-width: 400px) {
+      padding: 15px 10px;
+    }
   }
 
   td:first-child {
@@ -84,6 +98,12 @@ const ActivityContainer = styled.div`
     color: ${(props) => props.theme.colors.white};
     margin-left: 12.5px;
     align-self: center;
+
+    span {
+      @media (max-width: 800px) {
+        display: none;
+      }
+    }
   }
 
   .clone-image {
@@ -93,6 +113,14 @@ const ActivityContainer = styled.div`
   .transfer-wrapper {
     display: flex;
     flex-direction: row;
+
+    @media (max-width: 800px) {
+      display: none;
+    }
+  }
+
+  .transfer-placeholder {
+    display: flex;
   }
 
   .transfer-text {
@@ -109,10 +137,26 @@ const ActivityContainer = styled.div`
 
   .table-l-margin {
     margin-left: 75px;
+
+    @media (max-width: 1000px) {
+      margin-left: 25px;
+    }
+
+    @media (max-width: 500px) {
+      margin-left: 0px;
+    }
   }
 
   .table-r-margin {
     margin-right: 75px;
+
+    @media (max-width: 1000px) {
+      margin-right: 25px;
+    }
+
+    @media (max-width: 500px) {
+      margin-right: 0px;
+    }
   }
 
   .show-more-wrapper {
@@ -130,6 +174,14 @@ const ActivityContainer = styled.div`
     cursor: pointer;
     width: 92%;
   }
+
+  .block-number,
+  .txn-hash,
+  .transfer {
+    @media (max-width: 800px) {
+      display: none;
+    }
+  }
 `;
 
 const QUERY_SIZE = 50;
@@ -140,6 +192,7 @@ export default function Page() {
   const { fetchMore } = useSuspenseQuery(OVERALL_ACTIVITY_QUERY, {
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
+  const { width } = useViewportSize();
 
   const loadMoreTransactions = useCallback(async () => {
     if (loading) return;
@@ -191,9 +244,10 @@ export default function Page() {
         extraStyles = "top";
       }
 
+      const iconSize = width < 400 ? 30 : 45;
       return (
         <tr key={uuidv4()} className={extraStyles}>
-          <td>
+          <td className="transfer">
             <div className="transfer-wrapper">
               <div className="transfer-icon table-l-margin">
                 <TransferIcon />
@@ -205,20 +259,22 @@ export default function Page() {
             <Link href={`/clone/${tokenId}`}>
               <div className="image-name">
                 <Image
-                  width={45}
-                  height={45}
+                  width={iconSize}
+                  height={iconSize}
                   className="clone-image"
                   src={`https://clonex-assets.rtfkt.com/images/${tokenId}.png`}
                   alt={`Clone#${tokenId}`}
                 />
-                <div className="clone-name">Clone#{tokenId}</div>
+                <div className="clone-name">
+                  <span>CloneX</span>#{tokenId}
+                </div>
               </div>
             </Link>
           </td>
           <td>{from}</td>
           <td>{to}</td>
-          <td>{blockNumber}</td>
-          <td>{transactionHash}</td>
+          <td className="block-number">{blockNumber}</td>
+          <td className="txn-hash">{transactionHash}</td>
           <td>
             <div className="table-r-margin">{date}</div>
           </td>
@@ -235,12 +291,12 @@ export default function Page() {
       <table>
         <thead>
           <tr>
-            <th></th>
+            <th className="transfer"></th>
             <th>Name</th>
             <th>From</th>
             <th>To</th>
-            <th>Block No.</th>
-            <th>Txn Hash</th>
+            <th className="block-number">Block No.</th>
+            <th className="txn-hash">Txn Hash</th>
             <th>Time</th>
           </tr>
         </thead>
