@@ -7,11 +7,19 @@ import { truncateWalletAddress } from "../../utils/truncateWalletAddress";
 
 const HeaderInfoContainer = styled.div`
   h2 {
-    font-size: ${(props) => props.theme.fontSize.jumboXl};
+    font-size: ${(props) => props.theme.fontSize.jumboXXL};
     font-weight: 900;
     text-align: center;
     font-family: ${(props) => props.theme.fontFamily.outfit};
     margin: 10px 0;
+
+    @media (max-width: 500px) {
+      font-size: ${(props) => props.theme.fontSize.jumboXL};
+    }
+
+    @media (max-width: 375px) {
+      font-size: ${(props) => props.theme.fontSize.jumbo};
+    }
   }
 
   .owner-container {
@@ -28,8 +36,12 @@ const HeaderInfoContainer = styled.div`
   p {
     font-size: ${(props) => props.theme.fontSize.lg};
     font-weight: 600;
-    margin: 0;
     margin: 0 50px;
+
+    @media (max-width: 500px) {
+      font-size: ${(props) => props.theme.fontSize.md};
+      margin: 0 25px;
+    }
   }
 
   .owner-address {
@@ -57,6 +69,10 @@ const HeaderInfoContainer = styled.div`
     p {
       font-size: ${(props) => props.theme.fontSize.md};
       font-weight: 600;
+
+      @media (max-width: 500px) {
+        font-size: ${(props) => props.theme.fontSize.sm};
+      }
     }
   }
 
@@ -75,6 +91,10 @@ const HeaderInfoContainer = styled.div`
 
   .detail-outer-container {
     padding: 0 50px;
+
+    @media (max-width: 500px) {
+      padding: 0 25px;
+    }
   }
 `;
 

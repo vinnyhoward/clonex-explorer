@@ -31,6 +31,11 @@ const Container = styled.div`
     @media (max-width: 1200px) {
       width: 100%;
     }
+
+    @media (max-width: 750px) {
+      width: 100%;
+      height: 500px;
+    }
   }
 
   .clone-image {
@@ -39,6 +44,11 @@ const Container = styled.div`
     object-fit: cover;
     margin: 0;
     padding: 0;
+
+    @media (max-width: 750px) {
+      width: 100%;
+      height: 500px;
+    }
   }
 
   .info-section {

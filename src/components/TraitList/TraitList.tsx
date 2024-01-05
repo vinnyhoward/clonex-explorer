@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { CloneTraitsList } from "@/types";
 import Skeleton from "react-loading-skeleton";
+import { CloneTraitsList } from "@/types";
 import {
   AccessoriesIcon,
   BackIcon,
@@ -27,6 +27,14 @@ const TraitListContainer = styled.div`
   font-weight: 700;
   font-size: ${(props) => props.theme.fontSize.md};
 
+  @media (max-width: 500px) {
+    margin: 25px 20px;
+  }
+
+  @media (max-width: 400px) {
+    margin: 25px 10px;
+  }
+
   .row {
     display: flex;
     flex-direction: row;
@@ -35,6 +43,10 @@ const TraitListContainer = styled.div`
     border: 1px solid ${(props) => props.theme.colors.slateGrey};
     border-bottom: none;
     padding: 20px 30px;
+
+    @media (max-width: 500px) {
+      padding: 20px 15px;
+    }
   }
 
   .bottom {
@@ -63,6 +75,9 @@ const TraitListContainer = styled.div`
   .trait-name,
   .trait-header {
     text-transform: uppercase;
+    @media (max-width: 500px) {
+      font-size: ${(props) => props.theme.fontSize.sm};
+    }
   }
 
   .skeleton {

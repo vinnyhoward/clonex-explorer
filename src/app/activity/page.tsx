@@ -3,12 +3,12 @@ import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
+import { v4 as uuidv4 } from "uuid";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { OVERALL_ACTIVITY_QUERY } from "@/graphql/tokenQueries";
-import { v4 as uuidv4 } from "uuid";
 import { Transfer } from "@/types";
-import { shortenAddress, timeAgo } from "../../utils";
-import { TransferIcon } from "../../components/Icons";
+import { shortenAddress, timeAgo } from "@/utils";
+import { TransferIcon } from "@/components/Icons";
 import { useViewportSize } from "@/hooks/useViewportSize";
 
 const ActivityContainer = styled.div`
@@ -244,7 +244,7 @@ export default function Page() {
         extraStyles = "top";
       }
 
-      const iconSize = width < 400 ? 30 : 45;
+      const iconSize = width < 400 ? 20 : 45;
       return (
         <tr key={uuidv4()} className={extraStyles}>
           <td className="transfer">

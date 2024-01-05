@@ -48,6 +48,8 @@ export const defaultTheme = {
     xl: "1.25rem", // 20px
     xxl: "1.5rem", // 24px
     xxxl: "2rem", // 32px
-    jumboXl: "8rem", // 128px
+    jumbo: "4rem", // 64px
+    jumboXL: "6rem", // 86px
+    jumboXXL: "8rem", // 128px
   },
 };

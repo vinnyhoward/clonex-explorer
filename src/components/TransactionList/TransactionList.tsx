@@ -44,6 +44,10 @@ const TransactionListContainer = styled.div`
     height: 25px;
     width: 25px;
     margin-right: 10px;
+
+    @media (max-width: 500px) {
+      display: none;
+    }
   }
 
   .transfer-icon .icon {
@@ -51,13 +55,18 @@ const TransactionListContainer = styled.div`
     justify-content: center;
   }
 
-  .transfer-type,
   .transfer-from,
   .transfer-to,
   .transfer-time {
+    @media (max-width: 450px) {
+      font-size: ${(props) => props.theme.fontSize.sm};
+    }
   }
 
-  .transfer-time {
+  .transfer-type {
+    @media (max-width: 450px) {
+      display: none;
+    }
   }
 
   .bottom {
@@ -79,18 +88,6 @@ const TransactionListContainer = styled.div`
     font-weight: 500;
     font-size: ${(props) => props.theme.fontSize.md};
     color: ${(props) => props.theme.colors.slateGrey};
-  }
-
-  @media (max-width: 600px) {
-    .transfer-item {
-      flex-direction: column;
-      align-items: start;
-    }
-
-    .transfer-time {
-      margin-left: 0;
-      margin-top: 5px;
-    }
   }
 `;
 
@@ -179,7 +176,6 @@ export const TransactionList: React.FC<TraitListProps> = ({
       );
     });
   }, [transactions, loading, lastIndex]);
-  console.log('trans loading:', loading);
   return (
     <TransactionListContainer>
       <div className="table-header">
