@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import Skeleton from "react-loading-skeleton";
-import { TransferIcon } from "../TransferIcon/TransferIcon";
+import { TransferIcon } from "../Icons/TransferIcon";
 import { Transfer } from "@/types";
 import { shortenAddress, timeAgo } from "@/utils";
 import { Loader } from "../Loader/Loader";
