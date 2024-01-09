@@ -6,14 +6,13 @@ import gsap from "gsap";
 import { RTFKTLogo } from "@/components/RTFKTLogo";
 import { useModal } from "@/hooks/useModal";
 import { defaultTheme } from "@/styles/defaultTheme";
-import {
-  OpenSeaIcon,
-  DiscordIcon,
-  TwitterIcon,
-  TransactionIcon,
-  HomeIcon,
-  SearchIcon,
-} from "./Icons";
+import { OpenSeaIcon } from "./Icons/OpenSeaIcon";
+import { DiscordIcon } from "./Icons/DiscordIcon";
+import { TwitterIcon } from "./Icons/TwitterIcon";
+import { TransactionIcon } from "./Icons/TransactionIcon";
+import { HomeIcon } from "./Icons/HomeIcon";
+import { SearchIcon } from "./Icons/SearchIcon";
+
 
 const NavBarContainer = styled.div`
   .container {
