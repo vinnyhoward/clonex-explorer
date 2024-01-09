@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
@@ -85,8 +85,11 @@ export default function Page({ params }: { params: { slug: string } }) {
   const typedData = data as TokenDataQueryResult;
 
   const loadMoreTokens = async () => {
-    if (!typedData.token) return;
     setLoadingTransactions(true);
+    if (!typedData.token) {
+      return setLoadingTransactions(false);
+    }
+
     const currentSkipAmount = skipAmount;
     const response = await fetchMore({
       variables: {
@@ -96,9 +99,9 @@ export default function Page({ params }: { params: { slug: string } }) {
       },
       updateQuery: (prev: any, { fetchMoreResult }: any) => {
         if (!fetchMoreResult) return prev;
-
         setTransactions((prev) => {
           if (!prev) return fetchMoreResult.transfers;
+          if (!fetchMoreResult.transfers) return [...prev];
           return [...prev, ...fetchMoreResult.transfers];
         });
       },
@@ -110,7 +113,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     setLoadingTransactions(false);
   };
 
-  const renderSection = useCallback(() => {
+  const renderSection = () => {
     switch (section) {
       case Section.TraitList:
         return <TraitList loading={loadingTraits} traits={traits} />;
@@ -123,9 +126,9 @@ export default function Page({ params }: { params: { slug: string } }) {
           />
         );
     }
-  }, [section, loadingTraits, loadingTransactions]);
+  };
 
-  const renderTokenMetaData = useCallback(() => {
+  const renderTokenMetaData = () => {
     return (
       <Container>
         <div className="container">
@@ -151,7 +154,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         </div>
       </Container>
     );
-  }, [loadingTraits, loadingTransactions, section, traits, transactions]);
+  };
 
   useEffect(() => {
     const getTraitData = async () => {

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import Skeleton from "react-loading-skeleton";
@@ -17,6 +17,22 @@ const TransactionListContainer = styled.div`
   font-size: ${(props) => props.theme.fontSize.md};
   color: ${(props) => props.theme.colors.white};
   y-overflow: scroll;
+
+  .empty-transactions-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 30px;
+    color: ${(props) => props.theme.colors.slateGrey};
+    border-top: 1px solid ${(props) => props.theme.colors.slateGrey};
+  }
+
+  .empty-text {
+    font-size: ${(props) => props.theme.fontSize.md};
+    height: 200px;
+    padding: 15px 30px;
+  }
 
   .transfer-item {
     border: 1px solid ${(props) => props.theme.colors.slateGrey};
@@ -105,7 +121,48 @@ export const TransactionList: React.FC<TraitListProps> = ({
 }) => {
   const lastIndex = transactions.length - 1;
 
-  const renderTransactions = useCallback(() => {
+  const renderTransactions = () => {
+    if (loading) {
+      return Array.from({ length: 8 }).map(() => {
+        return (
+          <div key={uuidv4()} className="transfer-item">
+            <div className="transfer-icon-wrapper">
+              <Skeleton
+                width={90}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </div>
+            <div className="transfer-from">
+              <Skeleton
+                width={90}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </div>
+            <div className="transfer-to">
+              <Skeleton
+                width={90}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </div>
+            <div className="transfer-time">
+              <Skeleton
+                width={90}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </div>
+          </div>
+        );
+      });
+    }
+
     return transactions.map((transaction, index) => {
       const date = timeAgo(Number(transaction.blockTimestamp));
       const to = shortenAddress(transaction.to);
@@ -119,62 +176,19 @@ export const TransactionList: React.FC<TraitListProps> = ({
       return (
         <div key={uuidv4()} className={`transfer-item ${extraStyles}`}>
           <div className="transfer-icon-wrapper">
-            {loading ? (
-              <Skeleton
-                width={90}
-                baseColor="#DDDDDD"
-                highlightColor="#9B9B9B"
-                duration={1}
-              />
-            ) : (
-              <>
-                <div className="transfer-icon">
-                  <TransferIcon />
-                </div>
-                <div className="transfer-type">Transfer</div>
-              </>
-            )}
+            <div className="transfer-icon">
+              <TransferIcon />
+            </div>
+            <div className="transfer-type">Transfer</div>
           </div>
-          <div className="transfer-from">
-            {loading ? (
-              <Skeleton
-                width={90}
-                baseColor="#DDDDDD"
-                highlightColor="#9B9B9B"
-                duration={1}
-              />
-            ) : (
-              from
-            )}
-          </div>
-          <div className="transfer-to">
-            {loading ? (
-              <Skeleton
-                width={90}
-                baseColor="#DDDDDD"
-                highlightColor="#9B9B9B"
-                duration={1}
-              />
-            ) : (
-              to
-            )}
-          </div>
-          <div className="transfer-time">
-            {loading ? (
-              <Skeleton
-                width={90}
-                baseColor="#DDDDDD"
-                highlightColor="#9B9B9B"
-                duration={1}
-              />
-            ) : (
-              date
-            )}
-          </div>
+          <div className="transfer-from">{from}</div>
+          <div className="transfer-to">{to}</div>
+          <div className="transfer-time">{date}</div>
         </div>
       );
     });
-  }, [transactions, loading, lastIndex]);
+  };
+
   return (
     <TransactionListContainer>
       <div className="table-header">
@@ -185,11 +199,17 @@ export const TransactionList: React.FC<TraitListProps> = ({
       </div>
       {renderTransactions()}
 
-      <div className="show-more-wrapper">
-        <div onClick={loadMoreTokens} className="show-more">
-          {loading ? <Loader /> : "Show More"}
+      {transactions.length !== 0 ? (
+        <div className="show-more-wrapper">
+          <div onClick={() => loadMoreTokens()} className="show-more">
+            {loading ? <Loader /> : "Show More"}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="empty-transactions-container">
+          <p className="empty-text">There are no more transactions to show</p>
+        </div>
+      )}
     </TransactionListContainer>
   );
 };

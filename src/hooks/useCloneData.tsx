@@ -51,6 +51,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
 
           setCloneData((prevTokens) => {
             if (!prevTokens) return fetchMoreResult.tokens;
+            if (!fetchMoreResult.tokens) return [...prevTokens];
             return [...prevTokens, ...fetchMoreResult.tokens];
           });
 

@@ -185,7 +185,7 @@ export const TraitList: React.FC<TraitListProps> = ({ traits, loading }) => {
             <Skeleton
               width="100%"
               height={20}
-              baseColor="#DDDDDD"
+              baseColor="#404451"
               highlightColor="#9B9B9B"
               duration={1}
               containerClassName="skeleton"

@@ -4,12 +4,14 @@ import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
+import Skeleton from "react-loading-skeleton";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { OVERALL_ACTIVITY_QUERY } from "@/graphql/tokenQueries";
 import { Transfer } from "@/types";
 import { shortenAddress, timeAgo } from "@/utils";
 import { TransferIcon } from "@/components/Icons";
 import { useViewportSize } from "@/hooks/useViewportSize";
+import { Loader } from "@/components/Loader/Loader";
 
 const ActivityContainer = styled.div`
   height: 100%;
@@ -20,6 +22,21 @@ const ActivityContainer = styled.div`
   background-color: ${(props) => props.theme.colors.blueCharcoal};
   width: 100%;
   margin-bottom: 100px;
+
+  .empty-transactions-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 30px;
+    color: ${(props) => props.theme.colors.slateGrey};
+  }
+
+  .empty-text {
+    font-size: ${(props) => props.theme.fontSize.md};
+    height: 300px;
+    padding: 30px 30px;
+  }
 
   h1 {
     margin: 50px 0px 20px 0px;
@@ -47,9 +64,6 @@ const ActivityContainer = styled.div`
   tbody {
     border-right: 1px solid ${(props) => props.theme.colors.slateGrey};
     border-left: 1px solid ${(props) => props.theme.colors.slateGrey};
-  }
-
-  tr {
   }
 
   th {
@@ -195,8 +209,10 @@ export default function Page() {
   const { width } = useViewportSize();
 
   const loadMoreTransactions = async () => {
-    if (loading) return;
     setLoading(true);
+    if (loading) {
+      return setLoading(false);
+    };
 
     try {
       const currentSkipAmount = skipAmount;
@@ -208,7 +224,6 @@ export default function Page() {
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           if (!fetchMoreResult) return prev;
 
-          console.log("fetch more result:", fetchMoreResult);
           setTransactions((prevTokens) => {
             if (!prevTokens) return fetchMoreResult.transfers;
             return [...prevTokens, ...fetchMoreResult.transfers];
@@ -231,6 +246,95 @@ export default function Page() {
   }, []);
 
   const renderTransactionsActivity = () => {
+    if (loading) {
+      return Array.from({ length: 10 }).map(() => {
+        return (
+          <tr key={uuidv4()} className="top">
+            <td className="transfer">
+              <div className="transfer-wrapper">
+                <div className="transfer-icon table-l-margin">
+                  <Skeleton
+                    width={25}
+                    baseColor="#404451"
+                    highlightColor="#9B9B9B"
+                    duration={1}
+                  />
+                </div>
+                <p className="transfer-text">
+                  <Skeleton
+                    width={80}
+                    baseColor="#404451"
+                    highlightColor="#9B9B9B"
+                    duration={1}
+                  />
+                </p>
+              </div>
+            </td>
+            <td>
+              <div className="image-name">
+                <Skeleton
+                  width={45}
+                  height={45}
+                  baseColor="#404451"
+                  highlightColor="#9B9B9B"
+                  duration={1}
+                />
+                <div className="clone-name">
+                  <Skeleton
+                    width={80}
+                    baseColor="#404451"
+                    highlightColor="#9B9B9B"
+                    duration={1}
+                  />
+                </div>
+              </div>
+            </td>
+            <td>
+              <Skeleton
+                width={80}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </td>
+            <td>
+              <Skeleton
+                width={80}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </td>
+            <td className="block-number">
+              <Skeleton
+                width={80}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </td>
+            <td className="txn-hash">
+              <Skeleton
+                width={80}
+                baseColor="#404451"
+                highlightColor="#9B9B9B"
+                duration={1}
+              />
+            </td>
+            <td>
+              <div className="table-r-margin">
+                <Skeleton
+                  width={80}
+                  baseColor="#404451"
+                  highlightColor="#9B9B9B"
+                  duration={1}
+                />
+              </div>
+            </td>
+          </tr>
+        );
+      });
+    }
     return transactions.map((transaction, index) => {
       const { tokenId, blockNumber } = transaction;
       const date = timeAgo(Number(transaction.blockTimestamp));
@@ -280,9 +384,7 @@ export default function Page() {
       );
     });
   };
-
-  console.log("fetch more result:", transactions);
-  console.log("skip amount:", skipAmount);
+console.log('loading', loading);
   return (
     <ActivityContainer>
       <h1>Transaction Activity</h1>
@@ -301,11 +403,17 @@ export default function Page() {
         <tbody>{renderTransactionsActivity()}</tbody>
       </table>
 
-      <div className="show-more-wrapper">
-        <div onClick={loadMoreTransactions} className="show-more">
-          Show More
+      {transactions.length !== 0 ? (
+        <div className="show-more-wrapper">
+          <div onClick={() => loadMoreTransactions()} className="show-more">
+            {loading ? <Loader /> : "Show More"}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="empty-transactions-container">
+          <p className="empty-text">There are no more transactions to show</p>
+        </div>
+      )}
     </ActivityContainer>
   );
 }
