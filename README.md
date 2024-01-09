@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CloneX Frontend Application
 
-## Getting Started
+![CloneX](/assets/clonex.jpg)
 
-First, run the development server:
+This Next.js application is designed to interact with the CloneX subgraph, providing a user-friendly interface to access and display data from the CloneX NFT collection. Built with TypeScript and leveraging Next Functions for server-side operations, this application is a simple and efficient way to explore CloneX NFT data.
+
+1. Clone the repository:
+
+```bash
+git clone https://your-repository-url.git
+cd your-repository-folder
+```
+
+2. Install the dependencies
+
+```bash
+npm install
+```
+
+3. Start the development server and open `http://localhost:3000` with your browser to see the result.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## File Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- app/: Contains the page components.
+- components/: Reusable components used throughout the application.
+- lib/: Library code for interacting with the CloneX subgraph.
+- public/: Static files like images and fonts.
+- styles/: Global styles and theme-related files.
 
-## Learn More
+## Consuming the CloneX Subgraph
+The application queries the CloneX subgraph using GraphQL. The queries are managed within the graphql/ directory. For GraphQL related set up, that is located in the lib/ directory
 
-To learn more about Next.js, take a look at the following resources:
+```js
+import { gql, useQuery } from '@apollo/client';
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+const GET_NFT_DATA = gql`
+  query GetNFTData($tokenId: String!) {
+    nfts(where: { id: $tokenId }) {
+      id
+      owner {
+        id
+      }
+      metadata {
+        name
+        image
+      }
+    }
+  }
+`;
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+export const useNFTData = (tokenId: string) => {
+  const { data, loading, error } = useQuery(GET_NFT_DATA, {
+    variables: { tokenId },
+  });
 
-## Deploy on Vercel
+  return { data, loading, error };
+};
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Next Functions
+The Next Functions are used for server-side operations like querying the subgraph. These are located in the app/api/ directory.
+
