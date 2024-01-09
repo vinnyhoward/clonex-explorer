@@ -346,7 +346,7 @@ export default function Page() {
         extraStyles = "top";
       }
 
-      const iconSize = width < 400 ? 20 : 45;
+      const iconSize = width && width < 400 ? 20 : 45;
       return (
         <tr key={uuidv4()} className={extraStyles}>
           <td className="transfer">

@@ -1,24 +1,28 @@
 import { useState, useEffect } from "react";
 
 interface ViewportSize {
-  width: number;
-  height: number;
+  width: number | undefined;
+  height: number | undefined;
 }
 
 export const useViewportSize = (): ViewportSize => {
+  // Initialize with undefined or null values
   const [size, setSize] = useState<ViewportSize>({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: undefined,
+    height: undefined,
   });
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    
     const updateSize = () => {
       setSize({ width: window.innerWidth, height: window.innerHeight });
     };
 
+    updateSize();
+
     window.addEventListener("resize", updateSize);
 
-    // Cleanup the event listener when the component unmounts
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 

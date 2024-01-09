@@ -37,7 +37,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
     // @ts-ignore
     if (loading || !data?.tokens) return;
     setLoading(true);
-    const nextScrollPosition = window.scrollY;
+    const nextScrollPosition = typeof window !== 'undefined' ? window.scrollY : 0;
 
     try {
       const currentSkipAmount = skipAmount;
@@ -60,7 +60,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
 
-      if (response.networkStatus === 7) {
+      if (response.networkStatus === 7 && typeof window !== 'undefined') {
         window.scrollTo(0, nextScrollPosition - 100);
       }
     } catch (error) {
