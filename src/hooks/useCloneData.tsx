@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext, useCallback } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { GET_TOKENS_QUERY } from "@/graphql/tokenQueries";
 import { Token } from "@/types";
@@ -33,7 +33,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
 
-  const loadMoreTokens = useCallback(async () => {
+  const loadMoreTokens =  async () => {
     // @ts-ignore
     if (loading || !data?.tokens) return;
     setLoading(true);
@@ -67,7 +67,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   const value = {
     cloneData,

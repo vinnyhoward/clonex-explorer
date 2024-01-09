@@ -75,10 +75,10 @@ export default function Page({ params }: { params: { slug: string } }) {
   const [section, setSection] = useState(Section.TraitList);
   const [traits, setTraits] = useState<CloneTraitsList[]>([]);
   const [transactions, setTransactions] = useState<Transfer[]>([]);
-  const [loadingTransactions, setLoadingTransactions] = useState<boolean>(false);
+  const [loadingTransactions, setLoadingTransactions] =
+    useState<boolean>(false);
   const [loadingTraits, setLoadingTraits] = useState<boolean>(true);
   const [skipAmount, setSkipAmount] = useState<number>(0);
-  const [canLoadMore, setCanLoadMore] = useState<boolean>(true);
   const { data, fetchMore } = useSuspenseQuery(GET_TOKEN_DATA_QUERY, {
     variables: { id: slug, first: QUERY_SIZE, skip: skipAmount },
   });
@@ -86,7 +86,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const loadMoreTokens = async () => {
     if (!typedData.token) return;
-    // setLoadingTransactions(true);
+    setLoadingTransactions(true);
     const currentSkipAmount = skipAmount;
     const response = await fetchMore({
       variables: {
@@ -96,14 +96,6 @@ export default function Page({ params }: { params: { slug: string } }) {
       },
       updateQuery: (prev: any, { fetchMoreResult }: any) => {
         if (!fetchMoreResult) return prev;
-
-        if (fetchMoreResult.transfers.length < 5) {
-          setCanLoadMore(false);
-        }
-
-        if (fetchMoreResult.transfers[0].tokenId === transactions[0]?.tokenId) {
-          return setCanLoadMore(false);
-        }
 
         setTransactions((prev) => {
           if (!prev) return fetchMoreResult.transfers;
@@ -127,13 +119,12 @@ export default function Page({ params }: { params: { slug: string } }) {
           <TransactionList
             loadMoreTokens={loadMoreTokens}
             transactions={transactions}
-            canLoadMore={canLoadMore}
             loading={loadingTransactions}
           />
         );
     }
   }, [section, loadingTraits, loadingTransactions]);
-  
+
   const renderTokenMetaData = useCallback(() => {
     return (
       <Container>
@@ -187,14 +178,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   useEffect(() => {
     if (!typedData.transfers) return;
-
-    if (typedData.transfers.length < 5) {
-      setCanLoadMore(false);
-    }
-
-    if (typedData.transfers[0].tokenId === transactions[0]?.tokenId) {
-      return setCanLoadMore(false);
-    }
 
     setTransactions(typedData.transfers);
   }, [typedData.transfers, transactions]);

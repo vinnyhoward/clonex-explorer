@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { TransferIcon } from "../Icons";
 import { Transfer } from "@/types";
 import { shortenAddress, timeAgo } from "@/utils";
+import { Loader } from "../Loader/Loader";
 
 const TransactionListContainer = styled.div`
   display: flex;
@@ -94,14 +95,12 @@ const TransactionListContainer = styled.div`
 interface TraitListProps {
   transactions: Transfer[];
   loadMoreTokens: () => void;
-  canLoadMore: boolean;
   loading: boolean;
 }
 
 export const TransactionList: React.FC<TraitListProps> = ({
   transactions,
   loadMoreTokens,
-  canLoadMore,
   loading,
 }) => {
   const lastIndex = transactions.length - 1;
@@ -185,13 +184,12 @@ export const TransactionList: React.FC<TraitListProps> = ({
         <div className="transfer-time">Time</div>
       </div>
       {renderTransactions()}
-      {canLoadMore ? (
-        <div className="show-more-wrapper">
-          <div onClick={loadMoreTokens} className="show-more">
-            Show More
-          </div>
+
+      <div className="show-more-wrapper">
+        <div onClick={loadMoreTokens} className="show-more">
+          {loading ? <Loader /> : "Show More"}
         </div>
-      ) : null}
+      </div>
     </TransactionListContainer>
   );
 };

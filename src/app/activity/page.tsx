@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import Image from "next/image";
@@ -194,10 +194,9 @@ export default function Page() {
   });
   const { width } = useViewportSize();
 
-  const loadMoreTransactions = useCallback(async () => {
+  const loadMoreTransactions = async () => {
     if (loading) return;
     setLoading(true);
-    // const nextScrollPosition = window.scrollY;
 
     try {
       const currentSkipAmount = skipAmount;
@@ -219,14 +218,13 @@ export default function Page() {
       if (response.networkStatus === 7) {
         const newSkipAmount = currentSkipAmount + QUERY_SIZE;
         setSkipAmount(newSkipAmount);
-        // window.scrollTo(0, nextScrollPosition - 100);
       }
     } catch (error) {
       console.error("Error fetching more tokens:", error);
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     loadMoreTransactions();
