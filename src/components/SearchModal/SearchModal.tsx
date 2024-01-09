@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useSearch } from "@/hooks/useSearch";
 import { useModal } from "@/hooks/useModal";
 import { Loader } from "../Loader/Loader";
-import { ThinSearchIcon } from "../Icons";
+import { ThinSearchIcon } from "../Icons/ThinSearchIcon";
 
 type SearchModalProps = {};
 interface SearchModalContainerProps {

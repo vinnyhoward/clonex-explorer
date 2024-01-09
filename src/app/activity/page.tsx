@@ -9,7 +9,7 @@ import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { OVERALL_ACTIVITY_QUERY } from "@/graphql/tokenQueries";
 import { Transfer } from "@/types";
 import { shortenAddress, timeAgo } from "@/utils";
-import { TransferIcon } from "@/components/Icons";
+import { TransferIcon } from "@/components/Icons/TransferIcon";
 import { useViewportSize } from "@/hooks/useViewportSize";
 import { Loader } from "@/components/Loader/Loader";
 

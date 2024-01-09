@@ -2,20 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
 import { CloneTraitsList } from "@/types";
-import {
-  AccessoriesIcon,
-  BackIcon,
-  ClothingIcon,
-  DNAIcon,
-  EyeColorIcon,
-  EyeWearIcon,
-  FacialFeatureIcon,
-  HairIcon,
-  HelmetIcon,
-  JewelryIcon,
-  MouthIcon,
-  TypeIcon,
-} from "../Icons";
+import { AccessoriesIcon } from "../Icons/AccessoriesIcon";
+import { BackIcon } from "../Icons/BackIcon";
+import { ClothingIcon } from "../Icons/ClothingIcon";
+import { DNAIcon } from "../Icons/DNAIcon";
+import { EyeColorIcon } from "../Icons/EyeColorIcon";
+import { EyeWearIcon } from "../Icons/EyeWearIcon";
+import { FacialFeatureIcon } from "../Icons/FacialFeatureIcon";
+import { HairIcon } from "../Icons/HairIcon";
+import { HelmetIcon } from "../Icons/HelmetIcon";
+import { JewelryIcon } from "../Icons/JewelryIcon";
+import { MouthIcon } from "../Icons/MouthIcon";
+import { TypeIcon } from "../Icons/TypeIcon";
 
 const TraitListContainer = styled.div`
   display: flex;
