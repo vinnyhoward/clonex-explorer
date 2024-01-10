@@ -162,9 +162,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         if (!typedData.token) return;
         setLoadingTraits(true);
         const fetchedData = await fetch(
-          `${
-            process.env.NEXT_PUBLIC_API_URL
-          }/api/get-clone-details/${encodeURIComponent(typedData.token.id)}`
+          `/api/get-clone-details/${encodeURIComponent(typedData.token.id)}`
         );
         const dataJson: CloneTraits = await fetchedData.json();
         const traits: CloneTraitsList[] = JSON.parse(dataJson.attributes);
