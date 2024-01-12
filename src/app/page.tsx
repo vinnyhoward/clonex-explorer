@@ -86,6 +86,8 @@ export default function Page() {
         <Link href={`/clone/${token.id}`}>
           <div className="content">
             <Image
+              blurDataURL={token.metadata.base64Image}
+              placeholder="blur"
               src={token.metadata.image}
               alt={`CloneX#${token.id}`}
               width={500}

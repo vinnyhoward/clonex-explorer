@@ -10,6 +10,7 @@ export interface Metadata {
   __typename: "Metadata";
   id: string;
   image: string;
+  base64Image: string,
 }
 
 export type Account = {

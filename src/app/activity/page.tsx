@@ -212,7 +212,7 @@ export default function Page() {
     setLoading(true);
     if (loading) {
       return setLoading(false);
-    };
+    }
 
     try {
       const currentSkipAmount = skipAmount;
@@ -364,6 +364,8 @@ export default function Page() {
                   width={iconSize}
                   height={iconSize}
                   className="clone-image"
+                  blurDataURL={`https://storage.cloud.google.com/clone_blur_image/${tokenId}.txt`}
+                  placeholder="blur"
                   src={`https://clonex-assets.rtfkt.com/images/${tokenId}.png`}
                   alt={`Clone#${tokenId}`}
                 />
@@ -384,7 +386,7 @@ export default function Page() {
       );
     });
   };
-console.log('loading', loading);
+  console.log("loading", loading);
   return (
     <ActivityContainer>
       <h1>Transaction Activity</h1>
