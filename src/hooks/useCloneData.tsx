@@ -3,6 +3,7 @@ import React, { useState, createContext, useContext } from "react";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
 import { GET_TOKENS_QUERY } from "@/graphql/tokenQueries";
 import { Token } from "@/types";
+import { fetchBase64ForToken } from "@/utils/fetchBase64ForToken";
 
 const QUERY_SIZE = 50;
 
@@ -33,11 +34,11 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
     variables: { first: QUERY_SIZE, skip: skipAmount },
   });
 
-  const loadMoreTokens =  async () => {
-    // @ts-ignore
+  const loadMoreTokens = async () => {
     if (loading || !data?.tokens) return;
     setLoading(true);
-    const nextScrollPosition = typeof window !== 'undefined' ? window.scrollY : 0;
+    const nextScrollPosition =
+      typeof window !== "undefined" ? window.scrollY : 0;
 
     try {
       const currentSkipAmount = skipAmount;
@@ -49,10 +50,16 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           if (!fetchMoreResult) return prev;
 
-          setCloneData((prevTokens) => {
-            if (!prevTokens) return fetchMoreResult.tokens;
-            if (!fetchMoreResult.tokens) return [...prevTokens];
-            return [...prevTokens, ...fetchMoreResult.tokens];
+          const updatedTokens = fetchMoreResult.tokens.map(async (token) => {
+            const base64Image = await fetchBase64ForToken(token.id);
+            return { ...token, metadata: { ...token.metadata, base64Image } };
+          });
+
+          Promise.all(updatedTokens).then((tokensWithBase64) => {
+            setCloneData((prevTokens) => {
+              if (!prevTokens) return tokensWithBase64;
+              return [...prevTokens, ...tokensWithBase64];
+            });
           });
 
           const newSkipAmount = currentSkipAmount + QUERY_SIZE;
@@ -60,7 +67,7 @@ export const CloneProvider: React.FC<{ children: React.ReactNode }> = ({
         },
       });
 
-      if (response.networkStatus === 7 && typeof window !== 'undefined') {
+      if (response.networkStatus === 7 && typeof window !== "undefined") {
         window.scrollTo(0, nextScrollPosition - 100);
       }
     } catch (error) {

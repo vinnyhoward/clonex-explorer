@@ -70,6 +70,7 @@ export interface Transfer {
   to: string;
   tokenId: string;
   transactionHash: string;
+  base64Image?: string;
 }
 
 export interface TransfersQueryResult {

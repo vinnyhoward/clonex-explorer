@@ -81,22 +81,24 @@ export default function Page() {
   const renderGridItem = () => {
     if (!cloneData) return Array.from({ length: 100 }).map(() => null);
 
-    return cloneData.map((token: Token) => (
-      <GridItem key={uuidv4()}>
-        <Link href={`/clone/${token.id}`}>
-          <div className="content">
-            <Image
-              blurDataURL={token.metadata.base64Image}
-              placeholder="blur"
-              src={token.metadata.image}
-              alt={`CloneX#${token.id}`}
-              width={500}
-              height={500}
-            />
-          </div>
-        </Link>
-      </GridItem>
-    ));
+    return cloneData.map((token: Token) => {
+      return (
+        <GridItem key={uuidv4()}>
+          <Link href={`/clone/${token.id}`}>
+            <div className="content">
+              <Image
+                blurDataURL={token.metadata.base64Image}
+                placeholder="blur"
+                src={token.metadata.image}
+                alt={`CloneX#${token.id}`}
+                width={500}
+                height={500}
+              />
+            </div>
+          </Link>
+        </GridItem>
+      )
+    });
   };
 
   return (

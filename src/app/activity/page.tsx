@@ -12,6 +12,7 @@ import { shortenAddress, timeAgo } from "@/utils";
 import { TransferIcon } from "@/components/Icons/TransferIcon";
 import { useViewportSize } from "@/hooks/useViewportSize";
 import { Loader } from "@/components/Loader/Loader";
+import { fetchBase64ForToken } from "@/utils/fetchBase64ForToken";
 
 const ActivityContainer = styled.div`
   height: 100%;
@@ -224,9 +225,18 @@ export default function Page() {
         updateQuery: (prev: any, { fetchMoreResult }: any) => {
           if (!fetchMoreResult) return prev;
 
-          setTransactions((prevTokens) => {
-            if (!prevTokens) return fetchMoreResult.transfers;
-            return [...prevTokens, ...fetchMoreResult.transfers];
+          const updatedTransfer = fetchMoreResult.transfers.map(
+            async (transfer: any) => {
+              const base64Image = await fetchBase64ForToken(transfer.tokenId);
+              return { ...transfer, base64Image };
+            }
+          );
+
+          Promise.all(updatedTransfer).then((tokensWithBase64) => {
+            setTransactions((prevTokens) => {
+              if (!prevTokens) return tokensWithBase64;
+              return [...prevTokens, ...tokensWithBase64];
+            });
           });
         },
       });
@@ -346,6 +356,7 @@ export default function Page() {
         extraStyles = "top";
       }
 
+      const fallBackBase64Image = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAACXBIWXMAAAsTAAALEwEAmpwYAAABjElEQVR4nAXBW0hTcQDA4f9TDz31lj0ZezITAksxgsAgiB7E0awwQQeSIJQGIY1eIlOYKHh20elOZ2cXnPOWl8kuqYVLhRRJFFIEwYRYIRPdjuZ29Nf3CVtIQwpkkAbS2CdyuGJJxufj+HbTyCnwaud4T0FIgxrd/iOkoI4ruE7bKxMjHY9IROwEkmmUNKjaOcI2pmEbOsY5coD5SQV3Ci7x8JaBt5UFeGKfUDLgSeUQjphGz2ewKovcLy3EdO82zXWPeff8KR9kP+o+yL+yCNf3E1wrYB9doaulkZfmahLDMptLcXyrf+jdOKN/4xTh3s7i3oG+6A98XZ1YzDVEvQ6+TEbo/ZbF+fUfPfMnCOWvjpyE4M5voqE2qsvLeGYyMepoYHx2EVtYxz6hIdTDHOoZ9AWcTFuuYH1xDYvxLpudF1lw5iP1L9M9pCM+6jCTXEN9fYPa4gu435TQWv+AcEseiXYD4ck5OnwgxlJ7TFmvM2i5zJK7EE/zVd43VfEzVERm4SZHq0aU4S3+A2D9IiYNi5PAAAAAAElFTkSuQmCC";
       const iconSize = width && width < 400 ? 20 : 45;
       return (
         <tr key={uuidv4()} className={extraStyles}>
@@ -364,7 +375,7 @@ export default function Page() {
                   width={iconSize}
                   height={iconSize}
                   className="clone-image"
-                  blurDataURL={`https://storage.cloud.google.com/clone_blur_image/${tokenId}.txt`}
+                  blurDataURL={transaction.base64Image || fallBackBase64Image}
                   placeholder="blur"
                   src={`https://clonex-assets.rtfkt.com/images/${tokenId}.png`}
                   alt={`Clone#${tokenId}`}
@@ -386,7 +397,7 @@ export default function Page() {
       );
     });
   };
-  console.log("loading", loading);
+
   return (
     <ActivityContainer>
       <h1>Transaction Activity</h1>

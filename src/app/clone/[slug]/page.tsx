@@ -3,17 +3,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { useSuspenseQuery } from "@apollo/experimental-nextjs-app-support/ssr";
-import { TokenDataQueryResult } from "../../../types";
-import { HeaderInfo } from "../../../components/HeaderInfo/HeaderInfo";
-import { TraitList } from "../../../components/TraitList/TraitList";
-import { TransactionList } from "../../../components/TransactionList/TransactionList";
-import { GET_TOKEN_DATA_QUERY } from "../../../graphql/tokenQueries";
-import {
-  CloneTraits,
-  CloneTraitsList,
-  Section,
-  Transfer,
-} from "../../../types";
+import { TokenDataQueryResult } from "@/types";
+import { HeaderInfo } from "@/components/HeaderInfo/HeaderInfo";
+import { TraitList } from "@/components/TraitList/TraitList";
+import { TransactionList } from "@/components/TransactionList/TransactionList";
+import { GET_TOKEN_DATA_QUERY } from "@/graphql/tokenQueries";
+import { CloneTraits, CloneTraitsList, Section, Transfer } from "@/types";
 
 const Container = styled.div`
   .container {
